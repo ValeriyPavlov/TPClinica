@@ -1,0 +1,8 @@
+.boton{
+    border: 2px solid black;
+}
+
+.boton:hover{
+    background-color: rgb(43, 163, 43);
+    box-shadow: 0 12px 16px 0 rgba(10, 248, 2, 0.459), 0 17px 50px 0 rgba(59, 216, 11, 0.202);
+}

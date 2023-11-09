@@ -1,0 +1,44 @@
+<nav class="p-2 navbar sticky-top bg-gradient" [ngStyle]="{ 'background-color': 'rgb(37, 142, 255)' }">
+    <button class="btn boton bg-gradient" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation"> 
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <h1 class="text-white">Clínica Online</h1>
+    <img [ngStyle]="{ width: '64px' }" src="../../../assets/img/icono.png" alt="logo"/>
+    <div class="offcanvas offcanvas-start bg-nav" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Clínica Online</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <div *ngIf="userService.userLogged" class="d-flex">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <img [src]="userService.userLogged.profilePhoto" appNotImageUser alt="img-usuario" [ngStyle]="{ width: '32px', 'border-radius': '100%' }"/>
+                {{ userService.userLogged.name }}
+                {{ userService.userLogged.lastName }}
+              </a>
+              <ul class="dropdown-menu bg-nav" aria-labelledby="navbarDropdown">
+                <input type="button" value="Salir" class="btn btn-warning" (click)="signOut()">
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" routerLink="bienvenida" routerLinkActive="actual badge" data-bs-dismiss="offcanvas">Bienvenida</a>
+          </li>
+          <li *ngIf="!userService.userLogged" class="nav-item">
+            <a class="nav-link" aria-current="page" routerLink="ingresar" routerLinkActive="actual badge" data-bs-dismiss="offcanvas">Ingresar</a>
+          </li>
+          <li *ngIf="!userService.userLogged" class="nav-item">
+            <a class="nav-link" routerLink="registrarse" routerLinkActive="actual badge" data-bs-dismiss="offcanvas">Registrarse</a>
+          </li>
+          <li *ngIf=" userService.userLogged && userService.userLogged.userRole === 'admin'" class="nav-item">
+            <a class="nav-link" routerLink="usuarios" routerLinkActive="actual badge" data-bs-dismiss="offcanvas">Usuarios</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  

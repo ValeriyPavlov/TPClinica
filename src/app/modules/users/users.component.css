@@ -1,0 +1,17 @@
+.text-shadow {
+    cursor: pointer;
+    background-color: whitesmoke;
+    opacity: 75%;
+    padding: 0.3rem;
+    border-radius: 1rem;
+  
+    font-weight: bold;
+  }
+
+  .boton{
+    background-color: rgb(186, 231, 247);
+  }
+  .boton:hover{
+    background-color: rgba(72, 1, 253);
+    box-shadow: 0 0 20px rgba(97, 0, 200, 0.799);
+  }

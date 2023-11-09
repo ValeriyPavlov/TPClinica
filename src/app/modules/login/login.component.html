@@ -1,0 +1,47 @@
+<ngx-spinner type="ball-scale-multiple">
+	<img src="../../../assets/img/loader.gif" alt="">
+</ngx-spinner>
+<section class="login w-100 m-0 p-0">
+	<div class="w-100 m-0 p-3 h-100 row justify-content-center align-items-center">
+		<div class="screen">
+			<div class="screen__content row justify-content-center align-items-center">
+				<form [formGroup]="formLogin" (ngSubmit)="loginWithMailAndPassword()">
+					<div class="login__field row">
+						<img src="../../../assets/img/user.png" alt="E-mail" style="height: 50px; width: 50px;">
+						<input type="text" class="login__input form-control" placeholder="E-mail" name="email" formControlName="email">
+					</div>
+					<div [hidden]="formLogin.controls['email'].pristine || !formLogin.controls['email'].errors">
+						<span *ngIf="formLogin.controls['email'].errors?.['required']" class="mt-2 p-0 shadow text-center form-control alert alert-danger">E-mail es requerido</span>
+						<span *ngIf="formLogin.controls['email'].errors?.['email']" class="mt-2 p-0 shadow text-center form-control alert alert-danger">E-mail debe ser valido</span>
+					</div>
+					<div class="login__field row">
+						<img src="../../../assets/img/lock.png" alt="Contraseña" style="height: 50px; width: 50px;">
+						<input type="password" class="login__input form-control" placeholder="Contraseña" formControlName="password" name="password">
+					</div>
+					<div [hidden]="formLogin.controls['password'].pristine || !formLogin.controls['password'].errors">
+						<span class="mt-2 p-0 shadow text-center form-control alert alert-danger">Contraseña es requerida</span>
+					</div>
+					<button class="button login__submit d-flex flex-row align-items-between justify-content-between" type="submit">
+						<span class="button__text">Iniciar Sesion</span>
+						<img src="../../../assets/img/arrow.png" alt="Iniciar sesion" style="height: 25px; width: 25px;">
+					</button>
+					<div class="d-flex flex-column align-items-center justify-content-center">
+						<input type="button" class="button login__submit d-flex flex-row align-items-between justify-content-between" value="Registrarse" routerLink="/registrarse">
+						<span class="text-white">¿Aun no tienes cuenta?</span>
+					</div>		
+				</form>
+			</div>
+			<div class="screen__background">
+				<span class="screen__background__shape screen__background__shape4"></span>
+				<span class="screen__background__shape screen__background__shape3"></span>		
+				<span class="screen__background__shape screen__background__shape2"></span>
+				<span class="screen__background__shape screen__background__shape1"></span>
+			</div>		
+		</div>
+	</div>
+	<div class="p-3 d-flex flex-row align-items-between justify-content-center">
+		<input type="button" value="Admin" class="p-2 m-2 autolog btn" (click)="autolog('admin')">
+		<input type="button" value="Paciente" class="p-2 m-2 autolog btn" (click)="autolog('paciente')">
+		<input type="button" value="Especialista" class="p-2 m-2 autolog btn" (click)="autolog('especialista')">
+	</div>
+</section>

@@ -1,0 +1,23 @@
+.boton{
+    background-color: rgb(3, 98, 251);
+    border: 3px solid black;
+    border-radius: 10px;
+}
+
+.boton:hover{
+    background-color: rgb(3, 222, 251);
+    box-shadow: 0 5px 5px 3px rgb(188, 223, 255), 0 17px 50px 0 rgba(49, 219, 249, 0.575);
+}
+
+.actual{
+    background-color: rgb(70, 2, 173);
+    font-size: 24px;
+}
+
+.actual:hover{
+    color: rgb(3, 222, 251);
+}
+
+.bg-nav{
+    background-color: beige;
+}
