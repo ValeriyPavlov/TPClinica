@@ -36,6 +36,7 @@ Turnos / Mis Turnos:
 
 Desde esta seccion podremos visualizar todos nuestros turnos y accionar sobre ellos. En caso del usuario Administrador, podra visualizar todos los turnos existentes de todos los usuarios.
 
+![Screenshot](tree/main/src/assets/img/readme4.png)
 https://raw.githubusercontent.com/ValeriyPavlov/TPClinica/tree/main/src/assets/img/readme4.png
 
 
