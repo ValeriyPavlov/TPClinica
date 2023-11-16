@@ -17,7 +17,7 @@ Pantalla de Bienvenida:
 
 Al apretar el boton "Comenzar" accederemos a la pantalla de Login y/o Registro de Usuarios.
 
-https://raw.githubusercontent.com/ValeriyPavlov/TPClinica/tree/main/src/assets/img/readme1.png
+![alt text](https://raw.githubusercontent.com/ValeriyPavlov/TPClinica/tree/main/src/assets/img/readme1.png?raw=true)
 
 Login:
 
