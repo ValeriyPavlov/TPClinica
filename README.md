@@ -24,7 +24,7 @@ Login:
 Podemos iniciar sesion con un usuario registrado o bien registrar un usuario nuevo apretando el boton "Registrarse".
 La pagina cuenta tambien con una barra lateral de navegacion, para facilitar el desplazamiento entre seccion.
 
-https://raw.githubusercontent.com/ValeriyPavlov/TPClinica/tree/main/src/assets/img/readme2.png
+https://raw.githubusercontent.com/ValeriyPavlov/TPClinica/blob/tree/main/src/assets/img/readme2.png
 
 Mi Perfil:
 
