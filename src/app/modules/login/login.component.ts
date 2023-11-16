@@ -13,11 +13,10 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class LoginComponent implements OnInit{
 
-  protected userForQuickAccess?: User[];
   protected formLogin: FormGroup;
 
   constructor(private readonly alertService: AlertService, protected readonly userService: UserService, private readonly router: Router, private readonly formBuilder: FormBuilder, public sService: NgxSpinnerService) {
-
+    this.setUserForQuickAccess();
     this.formLogin = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]]
@@ -43,18 +42,12 @@ export class LoginComponent implements OnInit{
     this.formLogin.reset();
   }
 
-  protected autolog(userType: string){
-    switch(userType){
-      case "admin":
-        this.formLogin.setValue({ email: "admin@clinicaonline.com.ar", password: "testtest"});
-        break;
-      case "paciente":
-        this.formLogin.setValue({ email: "paciente@sfolkar.com", password: "testtest"});
-        break;
-      case "especialista":
-        this.formLogin.setValue({ email: "especialista@myinfoinc.com", password: "testtest"});
-        break;
-    }
+  protected autolog(user: any){
+    this.formLogin.setValue({ email: user.email, password: user.password });
   }
-  
+
+  private async setUserForQuickAccess() {
+    await this.userService.getUsersForQuickAccess();
+  }
+
 }

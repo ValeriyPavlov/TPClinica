@@ -2,7 +2,7 @@
 	<img src="../../../assets/img/loader.gif" alt="">
 </ngx-spinner>
 <section class="login w-100 m-0 p-0">
-	<div class="w-100 m-0 p-3 h-100 row justify-content-center align-items-center">
+	<div class="w-100 m-0 p-3 h-100 d-flex flex-row justify-content-center">
 		<div class="screen">
 			<div class="screen__content row justify-content-center align-items-center">
 				<form [formGroup]="formLogin" (ngSubmit)="loginWithMailAndPassword()">
@@ -38,10 +38,18 @@
 				<span class="screen__background__shape screen__background__shape1"></span>
 			</div>		
 		</div>
-	</div>
-	<div class="p-3 d-flex flex-row align-items-between justify-content-center">
-		<input type="button" value="Admin" class="p-2 m-2 autolog btn" (click)="autolog('admin')">
-		<input type="button" value="Paciente" class="p-2 m-2 autolog btn" (click)="autolog('paciente')">
-		<input type="button" value="Especialista" class="p-2 m-2 autolog btn" (click)="autolog('especialista')">
+		<div class="p-2">
+			<div *ngFor="let item of this.userService.usersQuickAccess" class="col">
+				<button (click)="autolog(item)" class="autolog btn m-1 p-2" style="height: 80px; width: 250px;">
+					<div class="row">
+						<img src="{{item.profilePhoto}}" alt="foto User" style="height: 50px; width: 50px;">
+						<div class="col">
+							<div>{{item.lastName}}, {{item.name}}</div>
+							<div>({{item.userRole}})</div>
+						</div>
+					</div>
+				</button>
+			</div>
+		</div>
 	</div>
 </section>

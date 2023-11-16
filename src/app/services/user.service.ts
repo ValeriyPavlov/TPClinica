@@ -5,7 +5,7 @@ import { FirebaseStoreProvider } from '../providers/firebase_store.provider';
 import { FirebaseStorageProvider } from '../providers/firebase_storage.provider';
 import { User } from '../entities/User';
 import { Especialista } from '../entities/Specialist';
-import { collection, getFirestore, onSnapshot, query } from 'firebase/firestore';
+import { collection, count, getFirestore, onSnapshot, query } from 'firebase/firestore';
 import { initializeApp } from 'firebase/app';
 import { environment } from 'src/environments/environments';
 
@@ -16,6 +16,7 @@ import { environment } from 'src/environments/environments';
 export class UserService {
 
   public users: any[] = [];
+  public usersQuickAccess: any[] = [];
 
   constructor(private readonly firebaseAuthProvider: FirebaseAuthProvider, private readonly firebaseStoreProvider: FirebaseStoreProvider, private readonly firebaseStorageProvider: FirebaseStorageProvider,private readonly router: Router) {}
 
@@ -47,6 +48,36 @@ export class UserService {
         }
       });
       return this.users;
+    });
+  }
+
+  public async getUsersForQuickAccess(){
+    // Users Max Count for each userRole
+    let numPacientes = 3;
+    let numEspecialistas = 2;
+    let numAdmins = 1;
+    const q = query(collection(db, "usuarios"));
+    onSnapshot(q, (col) => {
+      this.usersQuickAccess = [];
+      col.forEach(async (doc) =>{
+        var usuario = doc.data() as User;
+        if(usuario.userRole == "paciente" && numPacientes > 0 && usuario.verified == true)
+        {
+          numPacientes = numPacientes - 1;
+          this.usersQuickAccess.push({...usuario, profilePhoto: (await this.getProfilePhoto(usuario)) as string});
+        }
+        if(usuario.userRole == "especialista" && numEspecialistas > 0 && usuario.verified == true)
+        {
+          numEspecialistas = numEspecialistas - 1;
+          this.usersQuickAccess.push({...usuario, profilePhoto: (await this.getProfilePhoto(usuario)) as string});
+        }
+        if(usuario.userRole == "admin" && numAdmins > 0 && usuario.verified == true)
+        {
+          numAdmins = numAdmins - 1;
+          this.usersQuickAccess.push({...usuario, profilePhoto: (await this.getProfilePhoto(usuario)) as string});
+        }
+      });
+      return this.usersQuickAccess;
     });
   }
 

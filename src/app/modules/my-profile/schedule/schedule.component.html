@@ -1,0 +1,51 @@
+<section class="w-100 m-0 p-1 h-100 row justify-content-center align-items-center">
+  <div class="bg-light shadow p-1 rounded col-lg-4 col-md-5 col-sm-8">
+    <div class="w-100 row justify-content-center justify-content-sm-start p-2">
+      <button title="Volver" class="col-md-3 col-2 btn btn-warning" (click)="return()"><i class="fa-solid fa-circle-arrow-left"></i></button>
+    </div>
+    <div class="row w-100 justify-content-center align-items-center">
+      <h2 class="text-center">Disponibilidad Horaria</h2>
+      <img class="col-3 mt-1" src="../../../../assets/img/icono.png" alt="register_paciente"/>
+    </div>
+    <form [formGroup]="formSchedule" class="p-3" (ngSubmit)="register()">
+      <div class="row mt-4 g-3 justify-content-center">
+        <div class="col-12">
+          <p class="fw-bold">Elija los dias disponibles:</p>
+          <div *ngFor="let day of possibleDaysOfWeek" class="form-check form-switch">
+            <label class="form-check-label" for="{{ day }}">{{ day }}</label>
+            <input class="form-check-input" id="{{ day }}" type="checkbox" formControlName="days" value="{{ day }}" (change)="selectDay($event)"/>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-1 g-3 justify-content-center">
+        <p class="fw-bold">Elija el rango de horarios:</p>
+        <div class="col-sm-6">
+          <label for="horainicio" class="form-label">Hora de Inicio:</label>
+          <select class="form-select" formControlName="timeStart" id="horafin">
+            <option value="" disabled selected>Elija una opcion</option>
+            <option *ngFor="let time of possibleTimes">{{ time }}</option>
+          </select>
+        </div>
+        <div class="col-sm-6">
+          <label for="horafin" class="form-label">Hora de Fin:</label>
+          <select class="form-select" formControlName="timeEnd" id="horafin">
+            <option value="" disabled selected>Elija una opcion</option>
+            <option *ngFor="let time of possibleTimes">{{ time }}</option>
+          </select>
+        </div>
+      </div>
+      <div class="row mt-4 g-3 justify-content-center">
+        <div class="col-12">
+          <p class="fw-bold">Elija la duracion de los turnos:</p>
+          <select class="form-select" formControlName="duration" id="duration">
+            <option value="" disabled selected>Elija una opcion</option>
+            <option value="0.5">30 Minutos</option>
+            <option value="1">60 Minutos</option>
+          </select>
+        </div>
+      </div>
+      <button class="mt-3 w-100 btn btn-lg btn-outline-success btn-block">Registrar disponibilidad</button>
+      <input type="button" value="Reestablecer disponibilidad" (click)="resetSchedule()" class="mt-3 w-100 btn btn-lg btn-outline-danger btn-block">
+    </form>
+  </div>
+</section>

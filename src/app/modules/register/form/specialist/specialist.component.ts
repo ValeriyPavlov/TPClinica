@@ -34,7 +34,8 @@ export class SpecialistComponent {
       speciality: ['',[Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
       email: ['', [Validators.required, Validators.email]],
       profilePhoto: ['', Validators.required],
-      password: ['',[Validators.required, Validators.minLength(6), Validators.maxLength(15)]]
+      password: ['',[Validators.required, Validators.minLength(6), Validators.maxLength(15)]],
+      recaptchaReactive: [null, Validators.required]
     });
   }
 
@@ -56,6 +57,9 @@ export class SpecialistComponent {
       }
     } catch (error: any) {
       await this.alertService.showAlert({icon: 'error', message: error.message, timer: 1500,});
+    }
+    finally{
+      this.sService.hide();
     }
   }
 

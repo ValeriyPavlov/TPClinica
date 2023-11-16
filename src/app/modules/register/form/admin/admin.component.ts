@@ -28,6 +28,7 @@ export class AdminComponent {
       email: ['', [Validators.required, Validators.email]],
       profilePhoto: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(15)]],
+      recaptchaReactive: [null, Validators.required]
     });
   }
 
@@ -48,6 +49,9 @@ export class AdminComponent {
       }
     } catch (error: any) {
       await this.alertService.showAlert({icon: 'error', message: error.message, timer: 2000});
+    }
+    finally{
+      this.sService.hide();
     }
   }
 

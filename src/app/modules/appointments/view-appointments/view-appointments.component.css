@@ -1,0 +1,10 @@
+
+.bg-state{
+    background-color: aliceblue;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.ratings_size{
+    transform: scale(3);
+}

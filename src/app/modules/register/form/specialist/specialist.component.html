@@ -112,6 +112,9 @@
           <span [hidden]="!formSpecialistRegister.controls['profilePhoto'].touched || !formSpecialistRegister.controls['profilePhoto'].errors" class="mt-2 p-0 shadow text-center form-control alert alert-danger">Foto de perfil es requerida</span>
         </div>
       </div>
+      <div class="col-12 mt-1">
+        <re-captcha formControlName="recaptchaReactive"></re-captcha>
+      </div>
       <input class="mt-3 w-100 btn btn-lg btn-outline-success btn-block" type="submit" value="Registrarse"/>
     </form>
   </div>

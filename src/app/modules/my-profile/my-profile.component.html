@@ -1,0 +1,33 @@
+<section class="profile">
+        <article class="row justify-content-center h-100 m-5 p-2 align-items-center">
+            <div class="bg-light shadow p-1 rounded col-lg-5 col-md-6 col-sm-8 card mb-3" style="max-width: 800px">
+                <div class="col g-0 align-items-center bg-beige" *ngIf="this.uService.userLogged">
+                    <div class="d-flex flex-row align-items-center justify-content-center">
+                        <img src="{{this.uService.userLogged.profilePhoto}}" alt="fotoPerfil" class="img-fluid rounded-start m-1 p-1">
+                        <div class="d-flex align-items-center justify-content-center flex-column">
+                            <h3>
+                                {{this.uService.userLogged.lastName}}, {{this.uService.userLogged.name}}
+                            </h3>
+                            <h4>
+                                ({{this.uService.userLogged.userRole | uppercase}})
+                            </h4>
+                        </div>
+                    </div>
+    
+                    <div *ngFor="let item of this.uService.userLogged | keyvalue " class="d-flex flex-column justify-content-center align-items-center">
+                        <h5 *ngIf="!item.key.startsWith('profilePhoto') && item.key != 'name' && item.key != 'lastName' && item.key != 'userRole'" class="m-2 p-2">
+                            {{item.key | keysToSpanish}}: {{item.value | speciality | booleans }}
+                        </h5>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="uService.userLogged?.userRole=='especialista'">
+                <div class="d-flex align-items-center justify-content-center">
+                    <button (click)="showFormSchedule()" [hidden]="showSchedule" class="btn btn-warning">Mis horarios</button>
+                </div>
+            <div [hidden]="!showSchedule">
+                <app-schedule [showSchedule]="showSchedule" (eventShowSchedule)="handlerUpdateScheduleView($event)"></app-schedule>
+            </div>
+            </div>
+        </article>
+</section>

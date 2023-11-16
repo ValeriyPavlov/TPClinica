@@ -1,14 +1,19 @@
-export class Schedule { public days?: Day[]; }
+export class Schedule { 
+    public days?: Day[];
+    public duration: number;
+    constructor(){
+        this.duration = 0;
+    }
+}
 
 export enum DaysOfWeek {
-
     Lunes = 'lunes',
     Martes = 'martes',
     Miercoles = 'miércoles',
     Jueves = 'jueves',
     Viernes = 'viernes',
     Sabado = 'sábado',
-    Domingo = 'domingo',
+    Domingo = 'domingo'
 }
   
 export class Day {

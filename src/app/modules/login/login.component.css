@@ -179,8 +179,8 @@ body {
 
 .autolog{
 	border: 2px solid black;
-	border-radius: 3px;
-	background-color: rgb(110, 241, 243);
+	border-radius: 10px;
+	background-color: rgb(100, 240, 240);
 }
 
 .autolog:hover{

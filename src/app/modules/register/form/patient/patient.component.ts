@@ -31,6 +31,7 @@ export class PatientComponent {
       profilePhoto: ['', Validators.required],
       profilePhotoTwo: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(15)]],
+      recaptchaReactive: [null, Validators.required]
     });
   }
 
@@ -52,6 +53,9 @@ export class PatientComponent {
     } 
     catch (error: any) {
       await this.alertService.showAlert({icon: 'error', message: error.message, timer: 2000});
+    }
+    finally{
+      this.sService.hide();
     }
   }
 

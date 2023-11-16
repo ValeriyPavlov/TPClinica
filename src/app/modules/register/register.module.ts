@@ -8,6 +8,8 @@ import { SpecialistComponent } from './form/specialist/specialist.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoaderModule } from 'src/app/components/loader/loader.module';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { RecaptchaModule, RecaptchaFormsModule, RecaptchaSettings, RECAPTCHA_SETTINGS } from 'ng-recaptcha';
+import { environment } from 'src/environments/environments';
 
 
 @NgModule({
@@ -23,7 +25,15 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     ReactiveFormsModule,
     FormsModule,
     LoaderModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    RecaptchaModule,
+    RecaptchaFormsModule
+  ],
+  providers: [
+    {
+      provide: RECAPTCHA_SETTINGS,
+      useValue: environment.recaptcha as RecaptchaSettings,
+    },
   ],
   exports: [
     RegisterComponent

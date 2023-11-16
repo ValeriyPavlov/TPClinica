@@ -37,6 +37,18 @@
           <li *ngIf=" userService.userLogged && userService.userLogged.userRole === 'admin'" class="nav-item">
             <a class="nav-link" routerLink="usuarios" routerLinkActive="actual badge" data-bs-dismiss="offcanvas">Usuarios</a>
           </li>
+          <li *ngIf="userService.userLogged" class="nav-item">
+            <a class="nav-link" routerLink="perfil" routerLinkActive="actual badge" data-bs-dismiss="offcanvas">Mi Perfil</a>
+          </li>
+          <li *ngIf="userService.userLogged && userService.userLogged?.userRole !== 'especialista'" class="nav-item">
+            <a class="nav-link" routerLink="turnos/solicitar" routerLinkActive="actual badge" data-bs-dismiss="offcanvas">Solicitar Turno</a>
+          </li>
+          <li *ngIf="userService.userLogged && userService.userLogged?.userRole === 'admin'" class="nav-item">
+            <a class="nav-link" routerLink="turnos/turnos" routerLinkActive="actual badge" data-bs-dismiss="offcanvas">Turnos</a>
+          </li>
+          <li *ngIf="userService.userLogged && userService.userLogged?.userRole !== 'admin'" class="nav-item">
+            <a class="nav-link" routerLink="turnos/turnos" routerLinkActive="actual badge" data-bs-dismiss="offcanvas">Mis Turnos</a>
+          </li>
         </ul>
       </div>
     </div>

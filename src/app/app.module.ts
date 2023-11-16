@@ -12,6 +12,8 @@ import { getStorage, provideStorage } from '@angular/fire/storage';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LoaderModule } from './components/loader/loader.module';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { RatingModule } from 'primeng/rating';
+
 
 
 @NgModule({
@@ -30,12 +32,14 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     BrowserAnimationsModule,
     LoaderModule,
     NgxSpinnerModule, 
-    BrowserAnimationsModule 
+    BrowserAnimationsModule,
+    RatingModule,
   ],
   exports: [
     LoaderModule,
     NgxSpinnerModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    RatingModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [],

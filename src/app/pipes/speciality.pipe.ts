@@ -6,9 +6,17 @@ import { Especialidad } from '../entities/Speciality';
 })
 export class SpecialityPipe implements PipeTransform {
 
-  transform(value: unknown, ...args: unknown[]): string {
+  transform(value: unknown, ...args: unknown[]): any {
     const speciality = value as Especialidad;
-    return speciality.description;
+    if(speciality.description)
+    {
+      return speciality.description;
+    }
+    else
+    {
+      return value;
+    }
+    
   }
 
 }

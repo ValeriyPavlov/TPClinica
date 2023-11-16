@@ -22,8 +22,19 @@ export class SpecialityService {
 
 
   public async addSpeciality(speciality: Especialidad){
-    const doc = this.firebaseStoreProvider.createDoc('specialities');
-    return this.firebaseStoreProvider.saveDoc(doc, JSON.parse(JSON.stringify(speciality)));
+    let exists = false;
+    const currentSpecs = await this.getAllSpecialities();
+    currentSpecs.forEach(spec => {
+      if(spec.description == speciality.description)
+      {
+        exists = true;
+      }
+    });
+    if(!exists)
+    {
+      const doc = this.firebaseStoreProvider.createDoc('specialities');
+      return this.firebaseStoreProvider.saveDoc(doc, JSON.parse(JSON.stringify(speciality)));
+    }
   }
 
 

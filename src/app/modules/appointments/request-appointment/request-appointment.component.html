@@ -1,0 +1,86 @@
+<div class="container card d-flex flex-col align-items-center justify-content-center">
+    <H3>Seccion: Solicitar Turno</H3>
+
+    <button type="button" (click)="startSelection()" [hidden]="!hiddenButtons" class="btn btn-primary">Solicitar Turno</button>
+    <div [hidden]="hiddenButtons">
+
+        <div class="card m-3 p-3">
+            <h4>Datos del turno:</h4>
+            <div>
+                Especialidad: {{selectedSpeciality?.description}}
+            </div>
+            <div>
+                Especialista: {{selectedSpecialist?.lastName}}, {{selectedSpecialist?.name}}
+            </div>
+            <div>
+                Fecha: {{selectedDay.date}} ({{selectedDay.dayOfWeek}})
+            </div>
+            <div>
+                Hora del dia: {{selectedHour | hours}} hs
+            </div>
+            <div>
+                Paciente: {{selectedPatient?.lastName}}, {{selectedPatient?.name}}
+            </div>
+        </div>
+
+
+        <div [hidden]="hiddenSpeciality">
+            <div class="card m-2 p-2">
+                <button type="button" class="btn btn-warning" (click)="return('A')"><i class="fa-solid fa-circle-arrow-left">Volver</i></button>
+                <p class="fw-bold m-3 p-1">Elija una especialidad:</p>
+                <div class="col-sm-6">
+                    <input type="button" value="{{speciality.description}}" *ngFor="let speciality of listOfSpecialities" class="btn btn-primary m-1 p-1" (click)="selectSpeciality(speciality)">
+                </div>
+            </div>
+        </div>
+
+        <div [hidden]="hiddenSpecialist">
+            <div class="card m-2 p-2">
+                <button type="button" class="btn btn-warning" (click)="return('B')"><i class="fa-solid fa-circle-arrow-left">Volver</i></button>
+                <p class="fw-bold m-3 p-1">Elija un especialista:</p>
+                <div class="col-sm-6">
+                    <input type="button" value="{{specialist.lastName}}, {{specialist.name}}" *ngFor="let specialist of listOfSpecialists" class="btn btn-primary m-1 p-1" (click)="selectSpecialist(specialist)">
+                </div>
+            </div>
+        </div>
+
+        <div [hidden]="hiddenSchedule">
+            <div class="card m-2 p-2">
+                <button type="button" class="btn btn-warning" (click)="return('C')"><i class="fa-solid fa-circle-arrow-left">Volver</i></button>
+                <p class="fw-bold m-3 p-1"> Seleccione el dia del turno:</p>
+                <div *ngFor="let day of availableDays">
+                    <input type="button" value="{{day.date}} ({{day.dayOfWeek}})" (click)="selectDay(day)" class="btn btn-primary m-1 p-1">
+                </div>
+            </div>
+        </div>
+
+        <div [hidden]="hiddenHours">
+            <div class="card m-2 p-2">
+                <button type="button" class="btn btn-warning" (click)="return('D')"><i class="fa-solid fa-circle-arrow-left">Volver</i></button>
+                <p class="fw-bold m-3 p-1"> Seleccione el horario del turno:</p>
+                <div *ngFor="let hour of availableHours">
+                    <input type="button" value="{{hour | hours}}hs - {{hour+this.appointmentDuration | hours}}hs" (click)="selectHours(hour)" class="btn btn-primary m-1 p-1">
+                </div>
+            </div>
+        </div>
+
+        <div [hidden]="hiddenPatient">
+            <div class="card m-2 p-2">
+                <button type="button" class="btn btn-warning" (click)="return('E')"><i class="fa-solid fa-circle-arrow-left">Volver</i></button>
+                <p class="fw-bold m-3 p-1">Elija un paciente:</p>
+                <div class="col-sm-6">
+                    <input type="button" value="{{patient.lastName}}, {{patient.name}}" *ngFor="let patient of listOfPatients" class="btn btn-primary m-1 p-1" (click)="selectPatient(patient)">
+                </div>
+            </div> 
+        </div>
+
+        <div [hidden]="hiddenAppointment">
+            <div class="card m-2 p-2">
+                <button type="button" class="btn btn-warning" (click)="return('F')"><i class="fa-solid fa-circle-arrow-left">Volver</i></button>
+                <input type="button" value="Solicitar Turno" (click)="createAppointment()" class="btn btn-success m-1 p-1">
+            </div>
+        </div>
+
+    </div>
+
+</div>

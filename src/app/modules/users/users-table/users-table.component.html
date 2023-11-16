@@ -31,7 +31,7 @@
                                 <ng-template #thenProfilePhoto>
                                     <img class="img-fluid rounded rounded-3" src="{{ item.value }}" alt="foto_perfil" />
                                 </ng-template>
-                                <ng-template #elseProfilePhoto>{{ item.value }}</ng-template>
+                                <ng-template #elseProfilePhoto>{{ item.value | booleans}}</ng-template>
                             </ng-template>
                         </td>
                     </ng-template>
