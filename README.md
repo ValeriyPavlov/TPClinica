@@ -17,27 +17,27 @@ Pantalla de Bienvenida:
 
 Al apretar el boton "Comenzar" accederemos a la pantalla de Login y/o Registro de Usuarios.
 
-![alt text](https://raw.githubusercontent.com/ValeriyPavlov/TPClinica/tree/main/src/assets/img/readme1.png?raw=true)
+![Screenshot](https://github.com/ValeriyPavlov/TPClinica/blob/main/src/assets/img/readme1.png?raw=true)
 
 Login:
 
 Podemos iniciar sesion con un usuario registrado o bien registrar un usuario nuevo apretando el boton "Registrarse".
 La pagina cuenta tambien con una barra lateral de navegacion, para facilitar el desplazamiento entre seccion.
 
-https://raw.githubusercontent.com/ValeriyPavlov/TPClinica/blob/tree/main/src/assets/img/readme2.png
+![Screenshot](https://github.com/ValeriyPavlov/TPClinica/blob/main/src/assets/img/readme2.png?raw=true)
 
 Mi Perfil:
 
 Muestra los datos basicos de la cuenta del usuario logeado, si el usuario es un Especialista, desde esta seccion podra cargar sus horarios.
 
-https://raw.githubusercontent.com/ValeriyPavlov/TPClinica/tree/main/src/assets/img/readme3.png
+![Screenshot](https://github.com/ValeriyPavlov/TPClinica/blob/main/src/assets/img/readme3.png?raw=true)
 
 Turnos / Mis Turnos:
 
 Desde esta seccion podremos visualizar todos nuestros turnos y accionar sobre ellos. En caso del usuario Administrador, podra visualizar todos los turnos existentes de todos los usuarios.
 
-![Screenshot](https://github.com/ValeriyPavlov/TPClinica/blob/main/src/assets/img/readme1.png?raw=true)
-https://raw.githubusercontent.com/ValeriyPavlov/TPClinica/tree/main/src/assets/img/readme4.png
+![Screenshot](https://github.com/ValeriyPavlov/TPClinica/blob/main/src/assets/img/readme4.png?raw=true)
+
 
 
 
