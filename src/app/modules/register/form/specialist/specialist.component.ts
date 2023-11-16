@@ -49,14 +49,14 @@ export class SpecialistComponent {
         const user = this.createUser();
         await this.userService.registerWithFirebase(user);
         this.sService.hide();
-        await this.alertService.showAlert({icon: 'success', message: `Registro completado con exito para ${user.name} ${user.lastName}!`, timer: 1500,});
+        await this.alertService.showAlert({icon: 'success', message: `Registro completado con exito para ${user.name} ${user.lastName}!`, timer: 1500});
         this.formSpecialistRegister.reset();
       } 
       else {
-        await this.alertService.showAlert({icon: 'error', message: 'Debe completar todos los campos', timer: 1500,});
+        await this.alertService.showAlert({icon: 'error', message: 'Debe completar todos los campos', timer: 1500});
       }
     } catch (error: any) {
-      await this.alertService.showAlert({icon: 'error', message: error.message, timer: 1500,});
+      await this.alertService.showAlert({icon: 'error', message: error.message, timer: 1500});
     }
     finally{
       this.sService.hide();

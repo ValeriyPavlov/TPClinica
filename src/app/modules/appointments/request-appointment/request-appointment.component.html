@@ -1,25 +1,27 @@
 <div class="container card d-flex flex-col align-items-center justify-content-center">
     <H3>Seccion: Solicitar Turno</H3>
-
+    <img src="../../../../assets/img/icono.png" alt="" style="width: 200px; height: 200px;">
     <button type="button" (click)="startSelection()" [hidden]="!hiddenButtons" class="btn btn-primary">Solicitar Turno</button>
     <div [hidden]="hiddenButtons">
 
-        <div class="card m-3 p-3">
-            <h4>Datos del turno:</h4>
+        <div class="card m-3 p-3 bg-beige" style="width: 50vw; height: auto;">
             <div>
-                Especialidad: {{selectedSpeciality?.description}}
-            </div>
-            <div>
-                Especialista: {{selectedSpecialist?.lastName}}, {{selectedSpecialist?.name}}
-            </div>
-            <div>
-                Fecha: {{selectedDay.date}} ({{selectedDay.dayOfWeek}})
-            </div>
-            <div>
-                Hora del dia: {{selectedHour | hours}} hs
-            </div>
-            <div>
-                Paciente: {{selectedPatient?.lastName}}, {{selectedPatient?.name}}
+                <h4>Datos del turno:</h4>
+                <div>
+                    Especialidad: {{selectedSpeciality?.description}}
+                </div>
+                <div>
+                    Especialista: {{selectedSpecialist?.lastName}}, {{selectedSpecialist?.name}}
+                </div>
+                <div>
+                    Fecha: {{selectedDay.date}} ({{selectedDay.dayOfWeek}})
+                </div>
+                <div>
+                    Hora del dia: {{selectedHour | hours}} hs
+                </div>
+                <div>
+                    Paciente: {{selectedPatient?.lastName}}, {{selectedPatient?.name}}
+                </div>
             </div>
         </div>
 
@@ -68,8 +70,8 @@
             <div class="card m-2 p-2">
                 <button type="button" class="btn btn-warning" (click)="return('E')"><i class="fa-solid fa-circle-arrow-left">Volver</i></button>
                 <p class="fw-bold m-3 p-1">Elija un paciente:</p>
-                <div class="col-sm-6">
-                    <input type="button" value="{{patient.lastName}}, {{patient.name}}" *ngFor="let patient of listOfPatients" class="btn btn-primary m-1 p-1" (click)="selectPatient(patient)">
+                <div class="col-sm-6" *ngFor="let patient of listOfPatients">
+                    <input type="button" value="{{patient.lastName}}, {{patient.name}}" class="btn btn-primary m-1 p-1" (click)="selectPatient(patient)">
                 </div>
             </div> 
         </div>
@@ -77,7 +79,7 @@
         <div [hidden]="hiddenAppointment">
             <div class="card m-2 p-2">
                 <button type="button" class="btn btn-warning" (click)="return('F')"><i class="fa-solid fa-circle-arrow-left">Volver</i></button>
-                <input type="button" value="Solicitar Turno" (click)="createAppointment()" class="btn btn-success m-1 p-1">
+                <input type="button" value="Confirmar" (click)="createAppointment()" class="btn btn-success m-3 p-3">
             </div>
         </div>
 

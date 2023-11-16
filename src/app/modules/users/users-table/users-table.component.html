@@ -41,7 +41,7 @@
                             <ng-template #thenElseEspcialistBlockProfilePhoto>
                                 <img class="p-1 img-fluid rounded rounded-3" src="{{ item.value }}" alt="foto_perfil"/>
                             </ng-template>
-                            <ng-template #elseElseEspcialistBlockProfilePhoto>{{item.value}}</ng-template>
+                            <ng-template #elseElseEspcialistBlockProfilePhoto>{{item.value | booleans}}</ng-template>
                         </td>
                     </ng-template>
                     <td class="text-center" *ngIf="roleOption === 'especialista'">
