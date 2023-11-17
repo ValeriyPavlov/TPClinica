@@ -8,6 +8,7 @@ import { Especialista } from '../entities/Specialist';
 import { collection, count, getFirestore, onSnapshot, query } from 'firebase/firestore';
 import { initializeApp } from 'firebase/app';
 import { environment } from 'src/environments/environments';
+import { firstValueFrom } from 'rxjs';
 
 
 @Injectable({
@@ -17,6 +18,7 @@ export class UserService {
 
   public users: any[] = [];
   public usersQuickAccess: any[] = [];
+  public patientPhotoTwo?: string;
 
   constructor(private readonly firebaseAuthProvider: FirebaseAuthProvider, private readonly firebaseStoreProvider: FirebaseStoreProvider, private readonly firebaseStorageProvider: FirebaseStorageProvider,private readonly router: Router) {}
 
@@ -81,6 +83,10 @@ export class UserService {
     });
   }
 
+  public async getPatientPhotoTwo(){
+    this.patientPhotoTwo = await this.getProfilePhoto(this.userLogged, 2) as string;
+  }
+
 
   public saveUserWithIdInStore(id: string, user: User) {
     return this.firebaseStoreProvider.setDocWithId('usuarios', id, JSON.parse(JSON.stringify(user)));
@@ -131,6 +137,10 @@ export class UserService {
       console.warn('No se obtuvo la imagen del usuario');
     }
     return undefined;
+  }
+
+  public getAllUsers() {
+    return this.firebaseStoreProvider.getCollection('usuarios');
   }
 }
 

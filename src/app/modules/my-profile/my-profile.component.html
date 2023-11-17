@@ -3,8 +3,9 @@
             <div class="bg-light shadow p-1 rounded col-lg-5 col-md-6 col-sm-8 card mb-3" style="max-width: 800px">
                 <div class="col g-0 align-items-center bg-beige" *ngIf="this.uService.userLogged">
                     <div class="d-flex flex-row align-items-center justify-content-center">
-                        <img src="{{this.uService.userLogged.profilePhoto}}" alt="fotoPerfil" class="img-fluid rounded-start m-1 p-1">
-                        <div class="d-flex align-items-center justify-content-center flex-column">
+                        <img src="{{this.uService.userLogged.profilePhoto}}" alt="fotoPerfil" class="img-fluid rounded-start m-1 p-1" style="height: 200px; width: 200px;">
+                        <img src="{{this.uService.patientPhotoTwo}}" alt="fotoPerfil2" *ngIf="this.uService.userLogged.userRole=='paciente'" class="img-fluid rounded-start m-1 p-1" style="height: 200px; width: 200px;">
+                        <div class="d-flex align-items-center justify-content-center flex-column m-2 p-1">
                             <h3>
                                 {{this.uService.userLogged.lastName}}, {{this.uService.userLogged.name}}
                             </h3>
@@ -13,17 +14,24 @@
                             </h4>
                         </div>
                     </div>
-    
                     <div *ngFor="let item of this.uService.userLogged | keyvalue " class="d-flex flex-column justify-content-center align-items-center">
-                        <h5 *ngIf="!item.key.startsWith('profilePhoto') && item.key != 'name' && item.key != 'lastName' && item.key != 'userRole'" class="m-2 p-2">
+                        <h5 *ngIf="!item.key.startsWith('profilePhoto') && item.key != 'name' && item.key != 'lastName' && item.key != 'userRole'" class="m-1 p-1">
                             {{item.key | keysToSpanish}}: {{item.value | speciality | booleans }}
                         </h5>
+                    </div>
+                    <div *ngIf="this.uService.userLogged.userRole=='especialista'" class="d-flex flex-row justify-content-center align-items-center card bg-beige">
+                        <h5 class="m-4">Horarios:</h5>
+                        <div class="d-flex flex-column justify-content-center">
+                            <h5 *ngFor="let item of this.schedule.days">
+                                {{item.dayOfWeek}}: {{item.timeStart}} a {{item.timeEnd}}
+                            </h5>
+                        </div>
                     </div>
                 </div>
             </div>
             <div *ngIf="uService.userLogged?.userRole=='especialista'">
                 <div class="d-flex align-items-center justify-content-center">
-                    <button (click)="showFormSchedule()" [hidden]="showSchedule" class="btn btn-warning">Mis horarios</button>
+                    <button (click)="showFormSchedule()" [hidden]="showSchedule" class="btn btn-warning">Establecer Disponibilidad Horaria</button>
                 </div>
             <div [hidden]="!showSchedule">
                 <app-schedule [showSchedule]="showSchedule" (eventShowSchedule)="handlerUpdateScheduleView($event)"></app-schedule>

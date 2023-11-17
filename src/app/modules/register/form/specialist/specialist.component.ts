@@ -85,7 +85,7 @@ export class SpecialistComponent {
     }
     else
     {
-      let speciality = new Especialidad({description: this.formSpecialistRegister.controls['speciality'].value});
+      let speciality = new Especialidad({description: this.formSpecialistRegister.controls['speciality'].value, image: "https://firebasestorage.googleapis.com/v0/b/pruebaapp-c7145.appspot.com/o/default_spec.png?alt=media&token=2c12d342-adef-4ed0-b4e2-82ba064f6f77"});
       this.specialitiesService.addSpeciality(speciality);
     }
   }

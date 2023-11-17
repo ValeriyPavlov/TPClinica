@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import Swal, { SweetAlertIcon } from 'sweetalert2';
+import Swal, { SweetAlertIcon, SweetAlertInput } from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root'
@@ -26,5 +26,80 @@ export class AlertService {
       cancelButtonText: 'Cancelar',
       confirmButtonText: 'Aceptar',
     });
+  }
+
+  public async showConfirm(config: {
+    icon?: SweetAlertIcon;
+    message: string;
+    showCancelButton?: boolean;
+    showConfirmButton?: boolean;
+    title?: string;
+    input: SweetAlertInput,
+    inputOptions?: any;
+  }){
+    return await Swal.fire({
+      title: "Confirmación",
+      text: config.message,
+      icon: config.icon,
+      input: config.input,
+      inputValue: "",
+      inputOptions: config.inputOptions,
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Aceptar",
+      cancelButtonText: "Cancelar"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        if(result.value != "")
+        {
+          return result.value;
+        }
+      }
+      else
+      {
+        return false;
+      }
+    });
+  }
+
+  public async showSurvey(config: {
+    icon?: SweetAlertIcon;
+    message: string;
+    showCancelButton?: boolean;
+    showConfirmButton?: boolean;
+    title?: string;
+    input: SweetAlertInput,
+    inputOptions?: any;
+  }){
+    return await Swal.fire({
+      title: "Confirmación",
+      text: config.message,
+      icon: config.icon,
+      input: config.input,
+      inputValue: "",
+      inputOptions: config.inputOptions,
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Aceptar",
+      cancelButtonText: "Cancelar"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        if(result.value != "")
+        {
+          return result.value;
+        }
+      }
+      else
+      {
+        return false;
+      }
+    });
+  }
+
+
+  public async showSimple(message:string){
+    Swal.fire(message);
   }
 }

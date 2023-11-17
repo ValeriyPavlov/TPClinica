@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Turno } from 'src/app/entities/Appointment';
 import { Paciente } from 'src/app/entities/Patient';
 import { Day, DaysOfWeek } from 'src/app/entities/Schedule';
@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
   templateUrl: './request-appointment.component.html',
   styleUrls: ['./request-appointment.component.css']
 })
-export class RequestAppointmentComponent {
+export class RequestAppointmentComponent implements OnInit{
 
   protected listOfSpecialities?: Especialidad[];
   protected selectedSpeciality?: Especialidad;
@@ -25,6 +25,7 @@ export class RequestAppointmentComponent {
   protected hiddenSchedule: boolean;
   protected hiddenHours: boolean;
   protected hiddenPatient: boolean;
+  protected listofUsers?: any[] = [];
   protected listOfSpecialists?: Especialista[];
   protected listOfPatients?: Paciente[];
   protected selectedSpecialist?: Especialista;
@@ -35,34 +36,42 @@ export class RequestAppointmentComponent {
   protected selectedHour: number;
   protected dates: string[] = [];
   protected selectedDate?: string;
-  protected hiddenAppointment: boolean;
   protected selectedPatient?: Paciente;
-  protected hiddenButtons: boolean;
   protected hiddenStart: boolean;
+  protected ref: any;
 
   constructor(protected readonly uService: UserService, private sService: SpecialityService, private aService: AppointmentService, private alertService: AlertService, protected router: Router){
     this.selectedDay = new Day();
     this.appointmentDuration = 0;
-    this.hiddenSpeciality = false;
+    this.hiddenSpeciality = true;
     this.hiddenSchedule = true;
-    this.hiddenSpecialist = true;
-    this.hiddenButtons = true;
-
+    this.hiddenSpecialist = false;
     this.hiddenPatient = true;
     this.hiddenHours = true;
-    this.hiddenAppointment = true;
     this.hiddenStart = false;
     this.selectedHour = 0;
-    this.setSpecialities();
-    this.uService.getUsers();
     this.aService.getAppointments();
+    
   }
 
-  protected startSelection(){
-    this.hiddenStart = true;
-    this.hiddenButtons = false;
+  ngOnInit(): void {
+    this.getSpecialists();
+    this.ref = this.uService.getAllUsers().subscribe(
+      (data: any) => {
+        this.listofUsers = data;
+        this.listOfSpecialists = this.listofUsers?.filter(esp => esp.userRole == 'especialista') as Especialista[];
+        this.ref.unsubscribe();
+      },
+      (error) => {
+        console.error('Error al obtener datos:', error);
+      }
+    );
   }
- 
+
+  protected async getSpecialists(){
+    await this.uService.getUsers()
+  }
+
   private async setSpecialities(){
     this.listOfSpecialities = await this.sService.getAllSpecialities();
   }
@@ -70,25 +79,24 @@ export class RequestAppointmentComponent {
   protected selectSpeciality(speciality: Especialidad)
   {
     this.selectedSpeciality = speciality;
+    this.setSchedule();
     this.hiddenSpeciality = true;
-    this.hiddenSpecialist = false;
-    this.setSpecialistsOptions();
+    this.hiddenSchedule = false;
   }
 
   protected setPatientOptions(){
     this.listOfPatients = this.uService.users.filter(user => user.userRole === 'paciente') as Paciente[];
   }
 
-  protected setSpecialistsOptions(){
-    let listSpecialists = this.uService.users.filter(user => user.userRole === 'especialista');
-    this.listOfSpecialists = listSpecialists.filter(spec => spec.speciality.description === this.selectedSpeciality?.description) as Especialista[];
+  protected async setSpecialistsOptions(){
+    await this.uService.getUsers();
+    return this.uService.users.filter(user => user.userRole === 'especialista') as Especialista[];
   }
 
   protected selectSpecialist(specialist: Especialista){
     this.selectedSpecialist = specialist;
-    this.setSchedule();
     this.hiddenSpecialist = true;
-    this.hiddenSchedule = false;
+    this.hiddenSpeciality = false;
   }
 
   protected setSchedule(){
@@ -127,7 +135,7 @@ export class RequestAppointmentComponent {
     else
     {
       this.selectedPatient = this.uService.userLogged as Paciente;
-      this.hiddenAppointment = false;
+      this.createAppointment();
     }
   }
 
@@ -172,8 +180,7 @@ export class RequestAppointmentComponent {
 
   protected selectPatient(patient: Paciente){
     this.selectedPatient = patient;
-    this.hiddenPatient = true;
-    this.hiddenAppointment = false;
+    this.createAppointment();
   }
 
   protected async createAppointment(){
@@ -211,19 +218,9 @@ export class RequestAppointmentComponent {
   protected return(option: string){
     switch (option)
     {
-      case "A":
-        this.hiddenStart = false;
-        this.hiddenButtons = true;
-        this.selectedSpeciality = undefined;
-        this.selectedSpecialist = undefined;
-        this.selectedDay = new Day();
-        this.selectedHour = 0;
-        this.selectedDate = undefined;
-        this.selectedPatient = undefined;
-        break;
       case "B":
-        this.hiddenSpeciality = false;
-        this.hiddenSpecialist = true;
+        this.hiddenSpeciality = true;
+        this.hiddenSpecialist = false;
         break;
       case "C":
         this.hiddenSpecialist = false;
@@ -237,19 +234,9 @@ export class RequestAppointmentComponent {
         this.hiddenHours = false;
         this.hiddenPatient = true;
         break;
-      case "F":
-        if(this.uService.userLogged?.userRole == 'paciente')
-        {
-          this.hiddenHours = false;
-          this.hiddenAppointment = true;
-        }
-        else
-        {
-          this.hiddenPatient = false;
-          this.hiddenAppointment = true;
-        }
-        break;
     }
   }
+
+  
 
 }

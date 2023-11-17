@@ -1,8 +1,8 @@
 <div class="container card d-flex flex-col align-items-center justify-content-center">
     <H3>Seccion: Solicitar Turno</H3>
     <img src="../../../../assets/img/icono.png" alt="" style="width: 200px; height: 200px;">
-    <button type="button" (click)="startSelection()" [hidden]="!hiddenButtons" class="btn btn-primary">Solicitar Turno</button>
-    <div [hidden]="hiddenButtons">
+    
+    
 
         <div class="card m-3 p-3 bg-beige" style="width: 50vw; height: auto;">
             <div>
@@ -25,23 +25,24 @@
             </div>
         </div>
 
-
-        <div [hidden]="hiddenSpeciality">
+        <div [hidden]="hiddenSpecialist">
             <div class="card m-2 p-2">
-                <button type="button" class="btn btn-warning" (click)="return('A')"><i class="fa-solid fa-circle-arrow-left">Volver</i></button>
-                <p class="fw-bold m-3 p-1">Elija una especialidad:</p>
-                <div class="col-sm-6">
-                    <input type="button" value="{{speciality.description}}" *ngFor="let speciality of listOfSpecialities" class="btn btn-primary m-1 p-1" (click)="selectSpeciality(speciality)">
+                <p class="fw-bold m-3 p-1">Elija un especialista:</p>
+                <div class="d-flex flex-row">
+                    <div class="d-flex flex-column m-1 p-1" *ngFor="let specialist of listOfSpecialists">
+                        <button class="btn boton m-1 p-1" (click)="selectSpecialist(specialist)" style="width: 100px;"><img src="{{specialist.profilePhoto}}" alt="foto" style="height: 70px; width: 60px;"><label for="specialist">{{specialist.lastName}}, {{specialist.name}}</label></button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div [hidden]="hiddenSpecialist">
+        <div [hidden]="hiddenSpeciality">
             <div class="card m-2 p-2">
                 <button type="button" class="btn btn-warning" (click)="return('B')"><i class="fa-solid fa-circle-arrow-left">Volver</i></button>
-                <p class="fw-bold m-3 p-1">Elija un especialista:</p>
+                <p class="fw-bold m-3 p-1">Elija una especialidad:</p>
                 <div class="col-sm-6">
-                    <input type="button" value="{{specialist.lastName}}, {{specialist.name}}" *ngFor="let specialist of listOfSpecialists" class="btn btn-primary m-1 p-1" (click)="selectSpecialist(specialist)">
+                    <button title="{{selectedSpecialist?.speciality?.description}}" class="btn boton2 rounded-circle"><img src="{{selectedSpecialist?.speciality?.image}}" alt="foto_especialidad"></button>
+                    <!-- <input type="button" value="{{selectedSpecialist?.speciality?.description}}"  class="btn btn-primary m-1 p-1" (click)="selectSpeciality(selectedSpecialist!.speciality)"> -->
                 </div>
             </div>
         </div>
@@ -75,14 +76,5 @@
                 </div>
             </div> 
         </div>
-
-        <div [hidden]="hiddenAppointment">
-            <div class="card m-2 p-2">
-                <button type="button" class="btn btn-warning" (click)="return('F')"><i class="fa-solid fa-circle-arrow-left">Volver</i></button>
-                <input type="button" value="Confirmar" (click)="createAppointment()" class="btn btn-success m-3 p-3">
-            </div>
-        </div>
-
-    </div>
 
 </div>

@@ -20,7 +20,7 @@
             <th *ngIf="this.aService.appointments.length > 0" class="text-center fw-bold">Hora</th>
             <th *ngIf="this.aService.appointments.length > 0" class="text-center fw-bold">Reseña</th>
             <th *ngIf="this.aService.appointments.length > 0" class="text-center fw-bold">Estado</th>
-            <th *ngIf="this.aService.appointments.length > 0" class="text-center fw-bold">Accion</th>
+            <th *ngIf="this.aService.appointments.length > 0" class="text-center fw-bold">Acciones</th>
           </tr>
         </thead>
         <tbody class="table-group-divider">
@@ -47,19 +47,11 @@
               {{element.state}}
             </td>
             <td *ngIf="listOfAppointmentsFiltered.length > 0" class="text-center">
-              <button [ngClass]="'btn btn-outline-success'" (click)="chooseElement(element)">Seleccionar</button>
+              <button *ngIf="element.state !='Realizado' && element.state != 'Cancelado' && element.state != 'Rechazado'" class="btn btn-danger m-1" type="button" (click)="cancelAppointment2(element)" title="CANCELAR">C</button>
             </td>
           </tr>
         </tbody>
       </table>
-    
-      <div [hidden]="hiddenCancelar">
-        <h3 class="row w-100 justify-content-center">Cancelar Turno:</h3>
-            <div class="h-100 p-5 bg-body-tertiary border rounded-3 align-items-center justify-content-center d-flex flex-column">
-                <textarea class="w-100 border rounded-3" name="motivos" id="motivos" cols="30" maxlength="255" rows="10" [(ngModel)]="reason" placeholder="Ingrese la razon de la cancelacion..."></textarea>
-                <button class="btn btn-danger m-1" type="button" (click)="cancelAppointment('Cancelado', this.reason)">Cancelar Turno</button>
-            </div>
-      </div>
 </div>
 
 <div *ngIf="this.uService.userLogged?.userRole == 'especialista'">
@@ -83,7 +75,7 @@
             <th *ngIf="this.aService.appointments.length > 0" class="text-center fw-bold">Dia</th>
             <th *ngIf="this.aService.appointments.length > 0" class="text-center fw-bold">Hora</th>
             <th *ngIf="this.aService.appointments.length > 0" class="text-center fw-bold">Estado</th>
-            <th *ngIf="this.aService.appointments.length > 0" class="text-center fw-bold">Accion</th>
+            <th *ngIf="this.aService.appointments.length > 0" class="text-center fw-bold">Acciones</th>
           </tr>
         </thead>
         <tbody class="table-group-divider">
@@ -107,55 +99,14 @@
                 {{element.state}}
             </td>
             <td *ngIf="listOfAppointmentsFiltered.length > 0" class="text-center">
-              <button [ngClass]="'btn btn-outline-success'" (click)="chooseElementSpec(element)">Seleccionar</button>
+              <button *ngIf="element.state !='Realizado' && element.state != 'Cancelado' && element.state != 'Rechazado'" class="btn btn-danger m-1" type="button" (click)="cancelAppointment2(element)" title="CANCELAR">C</button>
+              <button *ngIf="element.review" class="btn btn-warning m-1" type="button" (click)="showReview(element)" title="RESEÑA">R</button>
+              <button *ngIf="element.state == 'Pendiente'" class="btn btn-success m-1" type="button" (click)="showAccept(element)" title="ACEPTAR">A</button>
+              <button *ngIf="element.state == 'Aceptado'" class="btn btn-success m-1" type="button" (click)="finishAppointment(element)" title="FINALIZAR">F</button>
             </td>
           </tr>
         </tbody>
       </table>
-
-      <div [hidden]="hiddenButtons">
-        <div class="d-flex align-items-center justify-content-center flex-row">
-          <button class="btn btn-success m-1" type="button" *ngIf="appointmentSelected?.state == 'Pendiente'" (click)="showAccept()">Aceptar Turno</button>
-          <button class="btn btn-danger m-1" type="button" *ngIf="appointmentSelected?.state == 'Pendiente'" (click)="showReject()">Rechazar Turno</button>
-          <button class="btn btn-danger m-1" type="button" *ngIf="appointmentSelected?.state == 'Pendiente'" (click)="showCancel()">Cancelar Turno</button>
-          <button class="btn btn-primary m-1" type="button" *ngIf="appointmentSelected?.state == 'Aceptado'" (click)="showFinish()">Finalizar Turno</button>
-          <button class="btn btn-warning m-1" type="button" *ngIf="appointmentSelected?.review" (click)="showReview()">Ver Reseña</button>
-        </div>
-      </div>
-    
-      <div [hidden]="hiddenCancelar">
-        <h3 class="row w-100 justify-content-center">Cancelar Turno:</h3>
-            <div class="h-100 p-5 bg-body-tertiary border rounded-3 align-items-center justify-content-center d-flex flex-column">
-                <textarea class="w-100 border rounded-3" name="motivos" id="motivos" cols="30" maxlength="255" rows="10" [(ngModel)]="reason" placeholder="Ingrese el motivo de la cancelacion..."></textarea>
-                <button class="btn btn-danger m-1" type="button" (click)="cancelAppointment('Cancelado', this.reason)">Cancelar Turno</button>
-            </div>
-      </div>
-
-      <div [hidden]="hiddenReview">
-        <div class="d-flex align-items-center justify-content-center flex-column bg-body-tertiary card">
-          <h3>Reseña:</h3>
-          <h4 class="card container m-2 p-3">{{appointmentSelected?.review}}</h4>
-        </div>
-      </div>
-
-      <div [hidden]="hiddenReject">
-        <h3 class="row w-100 justify-content-center">Rechazar Turno:</h3>
-            <div class="h-100 p-5 bg-body-tertiary border rounded-3 align-items-center justify-content-center d-flex flex-column bg-body-tertiary card">
-                <textarea class="w-100 border rounded-3" name="motivo" id="motivo" cols="30" maxlength="255" rows="10" [(ngModel)]="reason" placeholder="Ingrese la motivo del rechazo..."></textarea>
-                <button class="btn btn-danger m-1" type="button" (click)="cancelAppointment('Rechazado', this.reason)">Rechazar Turno</button>
-            </div>
-      </div>
-
-      <div [hidden]="hiddenFinish">
-        <h3 class="row w-100 justify-content-center">Finalizar Turno:</h3>
-            <div class="h-100 p-5 bg-body-tertiary border rounded-3 align-items-center justify-content-center d-flex flex-column bg-body-tertiary card">
-                <h4>Reseña del turno:</h4>
-                <textarea class="w-100 border rounded-3" name="motivo" id="motivo" cols="30" maxlength="255" rows="5" [(ngModel)]="reason" placeholder="Ingrese la reseña de la consulta..."></textarea>
-                <h4>Diagnostico del turno:</h4>
-                <textarea class="w-100 border rounded-3" name="diagnostico" id="diagnostico" cols="30" maxlength="255" rows="5" [(ngModel)]="diagnose" placeholder="Ingrese el diagnostico de la consulta..."></textarea>
-                <button class="btn btn-success m-1" type="button" (click)="finishAppointment(this.reason, this.diagnose)">Finalizar Turno</button>
-            </div>
-      </div>
 </div>
 
 <div *ngIf="this.uService.userLogged?.userRole == 'paciente'">
@@ -179,7 +130,7 @@
             <th *ngIf="this.aService.appointments.length > 0" class="text-center fw-bold">Dia</th>
             <th *ngIf="this.aService.appointments.length > 0" class="text-center fw-bold">Hora</th>
             <th *ngIf="this.aService.appointments.length > 0" class="text-center fw-bold">Estado</th>
-            <th *ngIf="this.aService.appointments.length > 0" class="text-center fw-bold">Accion</th>
+            <th *ngIf="this.aService.appointments.length > 0" class="text-center fw-bold">Acciones</th>
           </tr>
         </thead>
         <tbody class="table-group-divider">
@@ -203,122 +154,14 @@
                 {{element.state}}
             </td>
             <td *ngIf="listOfAppointmentsFiltered.length > 0" class="text-center">
-              <button [ngClass]="'btn btn-outline-success'" (click)="chooseElementPat(element)">Seleccionar</button>
+              <button *ngIf="element.state !='Realizado' && element.state != 'Cancelado' && element.state != 'Rechazado'" class="btn btn-danger m-1" type="button" (click)="cancelAppointment2(element)" title="CANCELAR">C</button>
+              <button *ngIf="element.review" class="btn btn-warning m-1" type="button" (click)="showReview(element)" title="RESEÑA">R</button>
+              <button *ngIf="element.state =='Realizado' && element.review" class="btn btn-primary m-1" type="button" (click)="showSurvey(element)" title="ENCUESTA">E</button>
+              <p-rating *ngIf="element.state == 'Realizado'" [(ngModel)]="element.calification" [cancel]="false" class="p-3 m-3" [iconOnStyle]="{'color': '#ebb734'}" (click)="sendRating(element)" title="CALIFICACIÓN"></p-rating>
             </td>
           </tr>
         </tbody>
       </table>
-    
-      <div [hidden]="hiddenButtons">
-        <div class="d-flex align-items-center justify-content-center flex-row">
-          <button class="btn btn-danger m-1" type="button" *ngIf="appointmentSelected?.state != 'Realizado'" (click)="showCancel()">Cancelar Turno</button>
-          <button class="btn btn-warning m-1" type="button" *ngIf="appointmentSelected?.review" (click)="showReview()">Ver Reseña</button>
-          <button class="btn btn-success m-1" type="button" *ngIf="appointmentSelected?.state == 'Realizado'" (click)="showCalif()">Calificar Atención</button>
-          <button class="btn btn-primary m-1" type="button" *ngIf="appointmentSelected?.review && appointmentSelected?.state == 'Realizado'" (click)="showSurvey()">Completar Encuesta</button>
-        </div>
-      </div>
-    
-      <div [hidden]="hiddenCancelar">
-        <h3 class="row w-100 justify-content-center">Cancelar Turno:</h3>
-            <div class="h-100 p-5 bg-body-tertiary border rounded-3 align-items-center justify-content-center d-flex flex-column">
-                <textarea class="w-100 border rounded-3" name="motivos" id="motivos" cols="30" maxlength="255" rows="10" [(ngModel)]="reason" placeholder="Ingrese el motivo de la cancelacion..."></textarea>
-                <button class="btn btn-danger m-1" type="button" (click)="cancelAppointment('Cancelado', this.reason)">Cancelar Turno</button>
-            </div>
-      </div>
-
-      <div [hidden]="hiddenReview">
-        <div class="d-flex align-items-center justify-content-center flex-column bg-body-tertiary card">
-          <h3>Reseña:</h3>
-          <h4 class="card container m-2 p-3">{{appointmentSelected?.review}}</h4>
-        </div>
-      </div>
-
-      <div [hidden]="hiddenReject">
-        <h3 class="row w-100 justify-content-center">Rechazar Turno:</h3>
-            <div class="h-100 p-5 bg-body-tertiary border rounded-3 align-items-center justify-content-center d-flex flex-column ">
-                <textarea class="w-100 border rounded-3" name="motivo" id="motivo" cols="30" maxlength="255" rows="10" [(ngModel)]="reason" placeholder="Ingrese la motivo del rechazo..."></textarea>
-                <button class="btn btn-danger m-1" type="button" (click)="cancelAppointment('Rechazado', this.reason)">Rechazar Turno</button>
-            </div>
-      </div>
-
-      <div [hidden]="hiddenFinish">
-        <h3 class="row w-100 justify-content-center">Finalizar Turno:</h3>
-            <div class="h-100 p-5 bg-body-tertiary border rounded-3 align-items-center justify-content-center d-flex flex-column">
-                <h4>Reseña del turno:</h4>
-                <textarea class="w-100 border rounded-3" name="motivo" id="motivo" cols="30" maxlength="255" rows="5" [(ngModel)]="reason" placeholder="Ingrese la reseña de la consulta..."></textarea>
-                <h4>Diagnostico del turno:</h4>
-                <textarea class="w-100 border rounded-3" name="diagnostico" id="diagnostico" cols="30" maxlength="255" rows="5" [(ngModel)]="diagnose" placeholder="Ingrese el diagnostico de la consulta..."></textarea>
-                <button class="btn btn-success m-1" type="button" (click)="finishAppointment(this.reason, this.diagnose)">Finalizar Turno</button>
-            </div>
-      </div>
-
-      <div [hidden]="hiddenCalif" class="card">
-        <div class="d-flex flex-column align-items-center justify-content-center p-3 m-3 bg-body-tertiary card">
-          <h3>Califica nuestro servicio:</h3>
-          <p-rating [(ngModel)]="rating" [cancel]="false" class="p-3 m-3 ratings_size" [iconOnStyle]="{'color': '#ebb734'}"></p-rating>
-        </div>
-        <div class="d-flex flex-column align-items-center justify-content-center bg-body-tertiary card">
-          <textarea class="w-100 border rounded-3" name="comentario" id="comentario" cols="30" maxlength="255" rows="5" [(ngModel)]="comment" placeholder="Ingrese su comentario..."></textarea>
-          <input type="button" value="Calificar" class="btn btn-success m-2" (click)="sendRating()">
-        </div>
-      </div>
-
-      <div [hidden]="hiddenSurvey">
-        <h3 class="row w-100 justify-content-center">Encuesta:</h3>
-        <div class="d-flex flex-col justify-content-center align-items-center card bg-body-tertiary">
-
-          <div class="d-flex flex-row justify-content-center align-items-center">
-            <label for="found" class="m-2 p-2">Indica como encontraste nuestra pagina:</label>
-            <div class="d-flex flex-column m-3 p-3">
-              <div>
-                <input type="radio" name="found" id="found" value="Internet" class="m-2" [(ngModel)]="surveyWay">
-                <label>Internet</label>
-              </div>
-              <div>
-                <input type="radio" name="found" id="found" value="Recomendacion" class="m-2" [(ngModel)]="surveyWay">
-                <label>Recomendación</label>
-              </div>
-              <div>
-                <input type="radio" name="found" id="found" value="Noticias" class="m-2" [(ngModel)]="surveyWay">
-                <label>Noticias</label>
-              </div>
-              <div>
-                <input type="radio" name="found" id="found" value="Otro" class="m-2" [(ngModel)]="surveyWay">
-                <label>Otro</label>
-              </div>
-            </div>
-          </div>
-
-          <div class="d-flex flex-row justify-content-center align-items-center">
-            <label for="reco" class="m-2 p-2">¿Recomendarias nuestro sitio web a tus amigos?</label>
-            <div class="d-flex flex-column justify-content-center align-items-center m-3 p-3">
-              <div>
-                <input type="radio" name="reco" id="reco" value="Si" class="m-2" [(ngModel)]="surveyReco">
-                <label>Si</label>
-              </div>
-              <div>
-                <input type="radio" name="reco" id="reco" value="No" class="m-2" [(ngModel)]="surveyReco">
-                <label>No</label>
-              </div>
-            </div>
-          </div>
-
-          <div class="d-flex flex-row justify-content-center align-items-center">
-            <label for="reco" class="m-2 p-2">¿Consideras que nuestro sitio web es facil de usar/navegar?</label>
-            <div class="d-flex flex-column justify-content-center align-items-center m-3 p-3">
-              <div>
-                <input type="radio" name="easy" id="easy" value="Si" class="m-2" [(ngModel)]="surveyEasy">
-                <label>Si</label>
-              </div>
-              <div>
-                <input type="radio" name="easy" id="easy" value="No" class="m-2" [(ngModel)]="surveyEasy">
-                <label>No</label>
-              </div>
-            </div>
-          </div>
-          <button (click)="completeSurvey()" class="btn btn-success">Enviar</button>
-        </div>
-    </div>
 </div>
 
 

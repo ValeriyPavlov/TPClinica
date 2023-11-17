@@ -4,6 +4,7 @@ import { Question, Survey } from 'src/app/entities/Survey';
 import { AlertService } from 'src/app/services/alert.service';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { UserService } from 'src/app/services/user.service';
+import Swal from 'sweetalert2';
 
 
 
@@ -24,24 +25,8 @@ export class ViewAppointmentsComponent implements OnInit{
   protected diagnose: any;
   protected reason: any;
   protected comment: any;
-  protected hiddenCancelar: boolean;
-  protected hiddenButtons: boolean;
-  protected hiddenFinish: boolean;
-  protected hiddenReview: boolean;
-  protected hiddenReject: boolean;
-  protected hiddenSurvey: boolean;
-  protected hiddenCalif: boolean;
-  protected rating: any;
-  protected appointmentSelected?: Turno;
-  constructor(public aService: AppointmentService, public alertService: AlertService, public uService: UserService) {
-    this.hiddenCancelar = true;
-    this.hiddenButtons = true;
-    this.hiddenFinish = true;
-    this.hiddenReview = true;
-    this.hiddenCalif = true;
-    this.hiddenReject = true;
-    this.hiddenSurvey = true;
-  }
+
+  constructor(public aService: AppointmentService, public alertService: AlertService, public uService: UserService) {}
 
   ngOnInit(): void{
     this.getAllAppointments();
@@ -95,164 +80,87 @@ export class ViewAppointmentsComponent implements OnInit{
     }
   }
 
-  protected chooseElement(appointment: Turno){
-    this.appointmentSelected = appointment;
-    if(appointment.state == "Pendiente" || appointment.state == "Cancelado")
+  protected async cancelAppointment2(appointment: Turno){
+    let result = await this.alertService.showConfirm({icon: 'info', message: "Ingrese la razon de la cancelacion:", input: 'text'});
+    if(result != undefined && result != false)
     {
-      this.hiddenCancelar = false;
-    }
-    else
-    {
-      this.hiddenCancelar = true;
-      this.reason = undefined;
-    }
-  }
-
-  protected chooseElementSpec(appointment: Turno){
-    this.appointmentSelected = appointment;
-    this.hiddenButtons = false;
-    this.hiddenReview = true;
-    this.hiddenCancelar = true;
-    this.hiddenReject = true;
-    this.hiddenFinish = true;
-  }
-
-  protected chooseElementPat(appointment: Turno){
-    this.appointmentSelected = appointment;
-    this.hiddenButtons = false;
-    this.hiddenReview = true;
-    this.hiddenCancelar = true;
-    this.hiddenSurvey = true;
-    this.hiddenCalif = true;
-  }
-
-  protected async cancelAppointment(state: AppointmentState, review: string) {
-    if (review != undefined && review != "") {
-      try {
-        await this.aService.saveAppointmentWithIdInStore(this.appointmentSelected?.id!, { ...this.appointmentSelected!, state: state, review: review});
-        await this.alertService.showAlert({icon: 'success', message: `Turno ${state} con exito`, timer: 2000});
-        this.appointmentSelected = undefined;
-        this.hiddenButtons = true;
-        if(state == "Cancelado"){
-          this.hiddenCancelar = true;
-        }
-        else{
-          if(state == "Rechazado")
-          {
-            this.hiddenReject = true
-          }
-        }
-        if(this.uService.userLogged?.userRole == 'paciente'){
-          this.listOfAppointmentsFiltered = this.aService.appointments.filter(app => app.patient.userId == this.uService.userLogged?.userId) as Turno[];
-        }
-        else{
-          if(this.uService.userLogged?.userRole == 'especialista'){
-            this.listOfAppointmentsFiltered = this.aService.appointments.filter(app => app.specialist.userId == this.uService.userLogged?.userId) as Turno[];
-          }
-          else
-          {
-            this.listOfAppointmentsFiltered = this.aService.appointments.filter(app => app.specialist.speciality.description.toLowerCase().includes("") || app.specialist.lastName.toLowerCase().includes("") || app.specialist.name.toLowerCase().includes("")) as Turno[];
-          }
-        }
-      } catch (error: any) {
-        await this.alertService.showAlert({icon: 'error',  message: error.message, timer: 2000});
+      await this.aService.saveAppointmentWithIdInStore(appointment?.id!, { ...appointment!, state: "Cancelado", review: result});
+      await this.alertService.showAlert({icon: 'success', message: `Turno CANCELADO con exito`, timer: 2000});
+      if(this.uService.userLogged?.userRole == 'paciente'){
+        this.listOfAppointmentsFiltered = this.aService.appointments.filter(app => app.patient.userId == this.uService.userLogged?.userId) as Turno[];
       }
-      this.reason = undefined;
-    } else {
+      else{
+        if(this.uService.userLogged?.userRole == 'especialista'){
+          this.listOfAppointmentsFiltered = this.aService.appointments.filter(app => app.specialist.userId == this.uService.userLogged?.userId) as Turno[];
+        }
+        else
+        {
+          this.listOfAppointmentsFiltered = this.aService.appointments.filter(app => app.specialist.speciality.description.toLowerCase().includes("") || app.specialist.lastName.toLowerCase().includes("") || app.specialist.name.toLowerCase().includes("")) as Turno[];
+        }
+      }
+    }
+    else {
       await this.alertService.showAlert({icon: 'error', message: 'Debe dejar una reseña al momento cancelar el turno', timer: 2000});
     }
   }
 
-  protected async finishAppointment(review: string, diagnose: string) {
-    if (review != undefined && review != "" && diagnose != undefined && diagnose != "") {
+  protected async finishAppointment(appointment: Turno) {
+    let review = await this.alertService.showConfirm({icon: 'info', message: "Ingrese una reseña:", input: 'text'});
+    let diagnose = await this.alertService.showConfirm({icon: 'info', message: "Ingrese el diagnostico:", input: 'text'});
+    if (review != undefined && review != false && diagnose != undefined && diagnose != false) {
       try {
-        await this.aService.saveAppointmentWithIdInStore(this.appointmentSelected?.id!, { ...this.appointmentSelected!, state: "Realizado", review: review, diagnose: diagnose});
+        await this.aService.saveAppointmentWithIdInStore(appointment?.id!, { ...appointment!, state: "Realizado", review: review, diagnose: diagnose});
         await this.alertService.showAlert({icon: 'success', message: 'Turno Finalizado con exito', timer: 2000}); 
-        this.appointmentSelected = undefined;
-        this.hiddenButtons = true;
-        this.hiddenFinish = true;
         this.listOfAppointmentsFiltered = this.aService.appointments.filter(app => app.specialist.userId == this.uService.userLogged?.userId) as Turno[];
       } catch (error: any) {
         await this.alertService.showAlert({icon: 'error',  message: error.message, timer: 2000});
       }
-      this.reason = undefined;
-      this.diagnose = undefined;
     } else {
       await this.alertService.showAlert({icon: 'error', message: 'Debe dejar una reseña y el diagnostico al momento finalizar el turno', timer: 2000});
     }
   }
 
-  protected async showAccept(){
+  protected async showAccept(appointment: Turno){
     try {
-      await this.aService.saveAppointmentWithIdInStore(this.appointmentSelected?.id!, { ...this.appointmentSelected!, state: "Aceptado"});
+      await this.aService.saveAppointmentWithIdInStore(appointment?.id!, { ...appointment!, state: "Aceptado"});
       await this.alertService.showAlert({icon: 'success', message: 'Turno Aceptado con exito', timer: 2000});
-      this.appointmentSelected = undefined;
-      this.hiddenButtons = true;
       this.listOfAppointmentsFiltered = this.aService.appointments.filter(app => app.specialist.userId == this.uService.userLogged?.userId) as Turno[];
     } catch (error: any) {
       await this.alertService.showAlert({icon: 'error',  message: error.message, timer: 2000});
     }
   }
 
-  protected showSurvey(){
-    this.hiddenSurvey = !this.hiddenSurvey;
-    this.surveyReco = undefined;
-    this.surveyWay = undefined;
-    this.surveyEasy = undefined;
-  }
 
-  protected showReview(){
-    this.hiddenReview = !this.hiddenReview;
-  }
-
-  protected showReject(){
-    this.hiddenReject = !this.hiddenReject;
-  }
-
-  protected showFinish(){
-    this.hiddenFinish = !this.hiddenFinish;
-  }
-
-  protected showCancel(){
-    this.hiddenCancelar = !this.hiddenCancelar;
-  }
-
-  protected showCalif(){
-    this.hiddenCalif = !this.hiddenCalif;
-    this.comment = undefined;
-    this.rating = undefined;
-  }
-
-  protected async completeSurvey(){
-    if(this.surveyEasy != undefined && this.surveyReco != undefined && this.surveyWay != undefined){
-      let questionR = new Question({question: "¿Recomendarias nuestro sitio web a tus amigos?", response: this.surveyReco});
-      let questionE = new Question({question: "¿Consideras que nuestro sitio web es facil de usar/navegar?", response: this.surveyEasy});
-      let questionW = new Question({question: "Indica como encontraste nuestra pagina:", response: this.surveyWay});
+  protected async showSurvey(appointment: Turno){
+    let result1 = await this.alertService.showSurvey({icon: 'info', message: "¿Recomendario nuestra pagina a sus amigos?", input: 'radio', inputOptions: {'Si': 'Si', 'No': 'No'}});
+    let result2 = await this.alertService.showSurvey({icon: 'info', message: "¿Consideras que nuestro sitio web es facil de usar/navegar?", input: 'radio', inputOptions: {'Si': 'Si', 'No': 'No', 'Mas o Menos': 'Mas o Menos'}});
+    let result3 = await this.alertService.showSurvey({icon: 'info', message: "Indica como encontraste nuestra pagina:", input: 'radio', inputOptions: {'Internet': 'Internet', 'Amigos': 'Amigos', 'Noticias': 'Noticias'}});
+    if(result1 && result2 && result3)
+    {
+      let questionR = new Question({question: "¿Recomendarias nuestro sitio web a tus amigos?", response: result1});
+      let questionE = new Question({question: "¿Consideras que nuestro sitio web es facil de usar/navegar?", response: result2});
+      let questionW = new Question({question: "Indica como encontraste nuestra pagina:", response: result3});
       let list = [];
       list.push(questionR);
       list.push(questionE);
       list.push(questionW);
       let survey = new Survey({questions: list});
-      await this.aService.saveAppointmentWithIdInStore(this.appointmentSelected?.id!, { ...this.appointmentSelected!, survey: survey});
+      await this.aService.saveAppointmentWithIdInStore(appointment?.id!, { ...appointment!, survey: survey});
       await this.alertService.showAlert({icon: 'success', message: 'Encuesta cargada con exito.', timer: 2000});
-      this.showSurvey();
     }
-    else
-    {
-      await this.alertService.showAlert({icon: 'error', message: 'Debe marcar cada uno de los campos!', timer: 2000});
-    }
+
   }
 
-  protected async sendRating(){
-    if(this.comment != undefined && this.rating != undefined)
+  protected async showReview(appointment: Turno){
+    this.alertService.showSimple(appointment.review!);
+  }
+
+  protected async sendRating(appointment: Turno){
+    let result = await this.alertService.showConfirm({icon: 'info', message: "Ingrese un comentario:", input: 'text'});
+    if(result != undefined && result != false)
     {
-      await this.aService.saveAppointmentWithIdInStore(this.appointmentSelected?.id!, { ...this.appointmentSelected!, calification: this.rating, comment: this.comment});
-      await this.alertService.showAlert({icon: 'success', message: 'Comentario cargado con exito.', timer: 2000});
-      this.showCalif();
-    }
-    else
-    {
-      await this.alertService.showAlert({icon: 'error', message: 'Debe dejar una calificacion y un comentario!', timer: 2000});
+      await this.aService.saveAppointmentWithIdInStore(appointment?.id!, { ...appointment!, comment: result});
+      await this.alertService.showAlert({icon: 'success', message: 'Calificado con exito.', timer: 2000});
     }
   }
 

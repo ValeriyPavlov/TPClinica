@@ -11,7 +11,7 @@ const routes: Routes = [
   { path: 'registrarse', loadChildren: () =>import('./modules/register/register.module').then((m) => m.RegisterModule), canActivate: [loggedGuard] },
   { path: 'usuarios', loadChildren: () =>import('./modules/users/users.module').then((m) => m.UsersModule), canActivate: [adminGuard] },
   { path: 'perfil', loadChildren: () =>import('./modules/my-profile/my-profile.module').then((m) => m.MyProfileModule), canActivate: [anyUserGuard] }, 
-  { path: 'turnos', loadChildren: () =>import('./modules/appointments/appointments.module').then((m) => m.AppointmentsModule), canActivate: [anyUserGuard]},
+  { path: 'turnos', loadChildren: () =>import('./modules/appointments/appointments.module').then((m) => m.AppointmentsModule)}, //canActivate: [anyUserGuard]
 ];
 
 @NgModule({

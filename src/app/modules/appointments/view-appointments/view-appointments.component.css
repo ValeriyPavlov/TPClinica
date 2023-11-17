@@ -8,3 +8,8 @@
 .ratings_size{
     transform: scale(3);
 }
+
+.swal2-radio {
+    display: grid !important;
+    text-align: left !important;
+}
