@@ -12,14 +12,17 @@ export class UsersComponent {
   public listUsers?: User[];
   protected listFiltered?: User[];
   protected userOption?: UserRole;
+  protected selectedUser?: User;
   protected showCreateUsers?: boolean;
   protected showTable: boolean;
   protected listChoseOption?: UserRole;
+  protected showHistory: boolean;
 
   constructor(protected readonly userService: UserService) {
     this.setListOfUsers();
     this.listUsers = this.userService.users;
     this.showTable = true;
+    this.showHistory = false;
   }
 
 
@@ -35,16 +38,30 @@ export class UsersComponent {
     await this.userService.getUsers();
   }
 
-
   protected activateCreateUsers() {
     this.showCreateUsers = true;
   }
 
-  return() {
+  protected return() {
     this.showCreateUsers = false;
   }
 
   protected handlerUpdateView(showTable: boolean) {
     this.showTable = showTable;
   }
+
+  protected handleSelectUser(dato:any){
+    this.selectedUser = dato;
+    this.showHistory = true;
+  }
+
+  protected returnFromHistory(){
+    this.showHistory = false;
+  }
+
+  protected downloadUsersAsExcel(){
+    this.userService.exportUsersToXls(this.userService.users, "usuarios");
+  }
+
+
 }

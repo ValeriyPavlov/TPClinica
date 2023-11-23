@@ -15,3 +15,13 @@
     background-color: rgba(72, 1, 253);
     box-shadow: 0 0 20px rgba(97, 0, 200, 0.799);
   }
+
+  .boton2{
+    background-color: rgb(106, 195, 90);
+    border: 2px solid black;
+  }
+  .boton2:hover{
+    background-color: rgb(2, 81, 15);
+    box-shadow: 0 0 20px rgba(51, 138, 1, 0.799);
+    color: white;
+  }

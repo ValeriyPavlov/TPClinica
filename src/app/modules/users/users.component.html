@@ -1,4 +1,11 @@
-<section class="row justify-content-end w-100 p-0 m-0">
+
+<div [hidden]="!showHistory" class="justify-content-center align-items-center">
+    <button title="Volver" class="btn btn-warning" (click)="returnFromHistory()"><i class="fa-solid fa-circle-arrow-left"></i>Volver</button>
+    <app-history [selectedUser]="selectedUser"></app-history>
+</div>
+
+
+<section class="row justify-content-end w-100 p-0 m-0" [hidden]="showHistory">
     <div class="p-5 mt-4 shadow bg-body-tertiary rounded-3">
         <div class="container-fluid py-5">
             <h1 class="text-center display-5 fw-bold">Usuarios Registrados</h1>
@@ -7,19 +14,23 @@
                 <button class="col-xxl-1 col-sm-2 col-6 m-1 p-3 btn boton rounded-circle" (click)="chooseListOption('especialista')" title="Especialistas"><img src="../../../assets/img/doctor.jpg" class="card-img img-fluid rounded-circle" alt="Especialistas" /></button>
                 <button class="col-xxl-1 col-sm-2 col-6 m-1 p-3 btn boton rounded-circle" (click)="chooseListOption('admin')" title="Administradores"><img src="../../../assets/img/admin.png" class="card-img img-fluid rounded-circle"alt="Administradores" /></button>
             </section>
+            <div class="d-flex flex-row justify-content-center align-items-center p-2 m-2">
+                <button (click)="downloadUsersAsExcel()" class="btn boton2">Descargar Usuarios <img src="../../../assets/img/excel.png" alt="excel" style="width: 75px; height: 50px;"></button>
+            </div>
         </div>
     </div>
+    <app-users-table [list]="listFiltered" [showTable]="showTable" [roleOption]="listChoseOption" (eventShowTable)="handlerUpdateView($event)" (eventSendUser)="handleSelectUser($event)"></app-users-table>
 </section>
 
-<app-users-table [list]="listFiltered" [showTable]="showTable" [roleOption]="listChoseOption" (eventShowTable)="handlerUpdateView($event)"></app-users-table>
+<!-- <app-users-table [list]="listFiltered" [showTable]="showTable" [roleOption]="listChoseOption" (eventShowTable)="handlerUpdateView($event)" (eventSendUser)="handleSelectUser($event)"></app-users-table> -->
 
-<section class="row justify-content-end w-100 p-0 m-0">
+<section class="row justify-content-end w-100 p-0 m-0" [hidden]="showHistory">
     <div class="p-5 mt-4 shadow bg-body-tertiary rounded-3">
         <div class="container-fluid py-5">
             <h1 class="text-center display-5 fw-bold">Alta Usuarios</h1>
             <section class="row justify-content-center align-items-center m-0 p-0 w-100" [hidden]="showCreateUsers">
                 <div class="w-100 row justify-content-center justify-content-sm-center p-2 m-0">
-                    <input type="button" value="Comenzar" class="col-sm-1 col-md-2 col-8 btn btn-warning" (click)="activateCreateUsers()">
+                    <input type="button" value="Comenzar" class="col-sm-1 col-md-2 col-8 btn boton2" (click)="activateCreateUsers()">
                 </div>
             </section>
             <div class="mt-4 rounded-3" [hidden]="!showCreateUsers">

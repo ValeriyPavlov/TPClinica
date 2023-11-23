@@ -1,9 +1,10 @@
+import { Schedule } from "./Schedule";
 import { Especialidad } from "./Speciality";
 import { User } from "./User";
 
 export class Especialista extends User {
     public verifiedByAdmin: boolean;
-    public speciality: Especialidad;
+    public speciality: {description: string[], schedule: Schedule};
     constructor(params: {
       userId: string;
       name: string;
@@ -12,7 +13,7 @@ export class Especialista extends User {
       dni: string;
       email: string;
       password: string;
-      speciality: Especialidad;
+      speciality: {description: string[], schedule: Schedule};
       verified: boolean;
       verifiedByAdmin: boolean;
       profilePhoto: string;

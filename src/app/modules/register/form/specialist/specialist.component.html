@@ -65,21 +65,21 @@
             <p class="fw-bold">Elija una especialidad:</p>
             <div *ngFor="let speciality of listOfSpecialities" class="form-check form-switch">
               <label class="form-check-label" for="{{ speciality.description }}">{{ speciality.description }}</label>
-              <input class="form-check-input" id="{{ speciality.description }}" type="radio" name="speciality" formControlName="speciality" value="{{ speciality.description }}" (click)="selectSpeciality(speciality.description)"/>
+              <input class="form-check-input" id="{{ speciality.description }}" type="checkbox" name="speciality" formControlName="speciality" value="{{ speciality.description }}" (change)="selectSpeciality($event)"/>
             </div>
             <div class="form-check form-switch">
               <label class="form-check-label" for="otro">Otra</label>
-              <input class="form-check-input" id="otro" type="radio" name="speciality" formControlName="speciality" value="Otro" (click)="selectSpeciality('Otro')"/>
+              <input class="form-check-input" id="otro" type="checkbox" name="speciality" formControlName="speciality" value="Otro" (click)="selectOtherSpeciality()"/>
             </div>
-            <div *ngIf="formSpecialistRegister.controls['speciality'].value === 'Otro' || showOtherSpeciality" class="col-12">
-              <label for="speciality" class="form-label">Nueva especialidad</label>
+            <div *ngIf="showOtherSpeciality" class="col-12">
+              <label for="otherSpeciality" class="form-label">Nueva especialidad</label>
               <div class="input-group">
-                <input name="speciality" type="text" class="form-control" id="speciality" formControlName="speciality" placeholder="Ingrese especialidad"/>
+                <input name="otherSpeciality" type="text" class="form-control" id="otherSpeciality" formControlName="otherSpeciality" placeholder="Ingrese especialidad" (blur)="addOtherSpec()"/>
               </div>
-              <div [hidden]="formSpecialistRegister.controls['speciality'].pristine || !formSpecialistRegister.controls['speciality'].invalid">
-                <span *ngIf="formSpecialistRegister.controls['speciality'].errors?.['required']" class="mt-2 p-0 shadow text-center form-control alert alert-danger" >Especialidad es requerida</span>
-                <span *ngIf="formSpecialistRegister.controls['speciality'].errors?.['minlength']" class="mt-2 p-0 shadow text-center form-control alert alert-danger">Debes ingresar al menos 3 caracteres</span>
-                <span *ngIf="formSpecialistRegister.controls['speciality'].errors?.['maxlength']" class="mt-2 p-0 shadow text-center form-control alert alert-danger">Superó la cantidad de caracteres máxima</span>
+              <div [hidden]="formSpecialistRegister.controls['otherSpeciality'].pristine || !formSpecialistRegister.controls['otherSpeciality'].invalid">
+                <span *ngIf="formSpecialistRegister.controls['otherSpeciality'].errors?.['required']" class="mt-2 p-0 shadow text-center form-control alert alert-danger" >Especialidad es requerida</span>
+                <span *ngIf="formSpecialistRegister.controls['otherSpeciality'].errors?.['minlength']" class="mt-2 p-0 shadow text-center form-control alert alert-danger">Debes ingresar al menos 3 caracteres</span>
+                <span *ngIf="formSpecialistRegister.controls['otherSpeciality'].errors?.['maxlength']" class="mt-2 p-0 shadow text-center form-control alert alert-danger">Superó la cantidad de caracteres máxima</span>
               </div>
             </div>
           </div>

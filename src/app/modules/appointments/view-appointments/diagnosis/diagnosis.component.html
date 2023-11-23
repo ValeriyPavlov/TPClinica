@@ -1,0 +1,89 @@
+<div class="row justify-content-center align-items-center">
+    <img class="col-3 mt-1" src="../../../../../assets/img/icono.png" alt="clinica" style="width: 300px; height: 200px;"/>
+    <h2 class="mt-1 col-12 text-center">Diagnostico</h2>
+</div>
+
+<button (click)="return()" class="btn btn-warning"><i class="fa-solid fa-circle-arrow-left">Volver</i></button>
+
+<form class="m-2 p-2" (ngSubmit)="sendDiagnosis()" [formGroup]="formDiagnosis" class="card p-2 m-1">
+    <div class="row mt-1 g-3 justify-content-center">
+      <div class="col-12">
+
+        <label for="height" class="form-label">Altura (CM):</label>
+        <input class="form-control" type="number" formControlName="height" placeholder="Ingrese la altura del paciente..."/>
+  
+        <div [hidden]="formDiagnosis.controls['height'].pristine || !formDiagnosis.controls['height'].invalid">
+          <span *ngIf="formDiagnosis.controls['height'].errors?.['required']" class="mt-2 p-0 shadow text-center form-control alert alert-danger">Altura es requerido</span>
+          <span *ngIf="formDiagnosis.controls['height'].errors?.['min'] || formDiagnosis.controls['height'].errors?.['max']" class="mt-2 p-0 shadow text-center form-control alert alert-danger">Altura invalida (30-300)</span>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="row mt-1 g-3 justify-content-center">
+      <div class="col-12">
+
+        <label for="weight" class="form-label">Peso (KG):</label>
+        <input class="form-control" type="number" formControlName="weight" placeholder="Ingrese el peso del paciente..."/>
+  
+        <div [hidden]="formDiagnosis.controls['weight'].pristine || !formDiagnosis.controls['weight'].invalid">
+          <span *ngIf="formDiagnosis.controls['weight'].errors?.['required']" class="mt-2 p-0 shadow text-center form-control alert alert-danger">Peso es requerido</span>
+          <span *ngIf="formDiagnosis.controls['weight'].errors?.['min'] || formDiagnosis.controls['weight'].errors?.['max']" class="mt-2 p-0 shadow text-center form-control alert alert-danger">Peso invalido (1-300)</span>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="row mt-1 g-3 justify-content-center">
+      <div class="col-12">
+
+        <label for="temperature" class="form-label">Temperatura (C°):</label>
+        <input class="form-control" type="number" formControlName="temperature" placeholder="Ingrese la temperatura del paciente..."/>
+  
+        <div [hidden]="formDiagnosis.controls['temperature'].pristine || !formDiagnosis.controls['temperature'].invalid">
+          <span *ngIf="formDiagnosis.controls['temperature'].errors?.['required']" class="mt-2 p-0 shadow text-center form-control alert alert-danger">Temperatura es requerida</span>
+          <span *ngIf="formDiagnosis.controls['temperature'].errors?.['min'] || formDiagnosis.controls['temperature'].errors?.['max']" class="mt-2 p-0 shadow text-center form-control alert alert-danger">Temperatura invalida (30-45)</span>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="row mt-1 g-3 justify-content-center">
+      <div class="col-12">
+
+        <label for="pressure" class="form-label">Presión (mmHg):</label>
+        <input class="form-control" type="number" formControlName="pressure" placeholder="Ingrese presión del paciente..."/>
+  
+        <div [hidden]=" formDiagnosis.controls['pressure'].pristine || !formDiagnosis.controls['pressure'].invalid">
+          <span *ngIf="formDiagnosis.controls['pressure'].errors?.['required']" class="mt-2 p-0 shadow text-center form-control alert alert-danger">Presion es requerida</span>
+          <span *ngIf="formDiagnosis.controls['pressure'].errors?.['min'] || formDiagnosis.controls['pressure'].errors?.['max']" class="mt-2 p-0 shadow text-center form-control alert alert-danger">Presion invalida (80-160)</span>
+        </div>
+
+      </div>
+    </div>
+  
+    <div *ngFor="let item of aditionalField" class="row mt-1 g-3 justify-content-center">
+
+      <div class="col-sm-6">
+        <label [for]="'key_' + item" class="form-label">Clave adicional: {{ item }}</label>
+        <input class="form-control" type="text" [formControlName]="'key_' + item" placeholder="Ingrese clave adicional {{ item }}..."/>
+        <span [hidden]=" formDiagnosis.controls['key_' + item].pristine || !formDiagnosis.controls['key_' + item].errors" class="mt-2 p-0 shadow text-center form-control alert alert-danger">Clave es requerida</span>
+      </div>
+
+      <div class="col-sm-6">
+        <label [for]="'value_' + item" class="form-label">Valor adicional: {{ item }}</label>
+        <input class="form-control" type="text" [formControlName]="'value_' + item" placeholder="Ingrese valor adicional {{ item }}..."/>
+        <span [hidden]="formDiagnosis.controls['value_' + item].pristine || !formDiagnosis.controls['value_' + item].errors" class="mt-2 p-0 shadow text-center form-control alert alert-danger">Valor es requerido</span>
+      </div>
+
+    </div>
+
+    <div class="w-100 m-0 p-1 row justify-content-evenly">
+        <button *ngIf="aditionalField.length < 3" type="submit" class="mt-3 ms-1 col-lg-3 col-sm-4 btn btn-lg btn-success btn-block" (click)="addField($event)" style="height: 50px; width: 100px;"><i class="text-center fa-solid fa-plus"></i></button>
+        <button *ngIf="aditionalField.length > 0" type="submit" class="mt-3 ms-1 col-lg-3 col-sm-4 btn btn-lg btn-danger btn-block" (click)="removeField($event)" style="height: 50px; width: 100px;"><i class="fa-solid fa-minus"></i></button>
+    </div>
+    <div class="row justify-content-evenly">
+        <button type="submit" class="mt-3 btn boton btn-block btn-lg" style="height: 100px; width: 250px;">Enviar</button>
+    </div>
+  </form>
+  

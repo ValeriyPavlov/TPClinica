@@ -11,12 +11,13 @@ export class Turno{
     public day: Day;
     public patient: Paciente;
     public specialist: Especialista;
+    public speciality: string | undefined;
     public state: AppointmentState;
     public review: string | undefined;
     public comment: string | undefined; 
     public survey: Survey | undefined;
     public calification: AppointmentCalification;
-    public diagnose: string | undefined;
+    public diagnosis: {} | undefined;
     constructor(appointment: {
         day: Day;
         patient: Paciente;
@@ -24,6 +25,7 @@ export class Turno{
         state?: AppointmentState;
         survey?: Survey;
         calification?: AppointmentCalification;
+        speciality: string;
     }) {
         this.day = appointment.day;
         this.patient = appointment.patient;
@@ -31,5 +33,6 @@ export class Turno{
         this.state = appointment.state;
         this.survey = appointment.survey;
         this.calification = appointment.calification;
+        this.speciality = appointment.speciality;
     }
 }

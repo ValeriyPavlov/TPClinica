@@ -6,20 +6,28 @@ import { Especialista } from 'src/app/entities/Specialist';
 import { Especialidad } from 'src/app/entities/Speciality';
 import { SpecialityService } from 'src/app/services/speciality.service';
 import { UserService } from 'src/app/services/user.service';
-import { daysInWeek, format } from 'date-fns';
+import { format } from 'date-fns';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { AlertService } from 'src/app/services/alert.service';
 import { Router } from '@angular/router';
+import { animate, style, transition, trigger } from '@angular/animations';
+
+const enterTransition = transition(':enter', [style({opacity: 0}), animate('1s ease-in', style({opacity:1}))]);
+const exitTransition = transition(':enter', [style({opacity: 1}), animate('500ms ease-out', style({opacity:0}))]);
+const fadeIn = trigger('fadeIn', [enterTransition]);
+const fadeOut = trigger('fadeOut', [exitTransition]);
 
 @Component({
   selector: 'app-request-appointment',
   templateUrl: './request-appointment.component.html',
-  styleUrls: ['./request-appointment.component.css']
+  styleUrls: ['./request-appointment.component.css'],
+  animations: [fadeIn, fadeOut]
 })
 export class RequestAppointmentComponent implements OnInit{
 
   protected listOfSpecialities?: Especialidad[];
-  protected selectedSpeciality?: Especialidad;
+  protected listOfAppointments?: Day[] = [];
+  protected selectedSpeciality: string;
   protected hiddenSpeciality: boolean;
   protected hiddenSpecialist: boolean;
   protected hiddenSchedule: boolean;
@@ -50,9 +58,11 @@ export class RequestAppointmentComponent implements OnInit{
     this.hiddenHours = true;
     this.hiddenStart = false;
     this.selectedHour = 0;
+    this.selectedSpeciality = "";
     this.aService.getAppointments();
-    
+    this.setSpecialities();
   }
+
 
   ngOnInit(): void {
     this.getSpecialists();
@@ -76,7 +86,7 @@ export class RequestAppointmentComponent implements OnInit{
     this.listOfSpecialities = await this.sService.getAllSpecialities();
   }
 
-  protected selectSpeciality(speciality: Especialidad)
+  protected selectSpeciality(speciality: string)
   {
     this.selectedSpeciality = speciality;
     this.setSchedule();
@@ -107,21 +117,27 @@ export class RequestAppointmentComponent implements OnInit{
     }
   }
 
-  protected selectDay(day: Day){
-    this.selectedDay = day;
-    this.setHours();
-    this.hiddenSchedule = true;
-    this.hiddenHours = false;
+  protected getSpecialityPhoto(speciality: string){
+    let imagen: any;
+    this.listOfSpecialities?.forEach(spec => {
+      if(spec.description == speciality)
+      {
+        imagen = spec.image;
+      }
+    });
+    return imagen;
   }
 
-  protected setHours(){
-    let start = parseInt(this.selectedDay.timeStart);
-    let end = parseInt(this.selectedDay.timeEnd);
+  protected setHours(day: Day){
+    let hours: number[] = [];
+    let start = parseFloat(day.timeStart);
+    let end = parseFloat(day.timeEnd);
     while(start < end)
     {
-      this.availableHours.push(start);
+      hours.push(start);
       start = start + this.appointmentDuration;
     }
+    return hours;
   }
 
   protected selectHours(startTime: number){
@@ -183,6 +199,23 @@ export class RequestAppointmentComponent implements OnInit{
     this.createAppointment();
   }
 
+  protected selectAppointment(day: Day, time: number){
+    this.selectedDay = day;
+    this.selectedHour = time;
+    this.hiddenSchedule = true;
+    if(this.uService.userLogged?.userRole == 'admin')
+    {
+      this.setPatientOptions();
+      this.hiddenPatient = false;
+    }
+    else
+    {
+      this.selectedPatient = this.uService.userLogged as Paciente;
+      this.createAppointment();
+    }
+  }
+
+
   protected async createAppointment(){
     const newDay = new Day({
       dayOfWeek: this.selectedDay.dayOfWeek, 
@@ -192,9 +225,9 @@ export class RequestAppointmentComponent implements OnInit{
     });
     if(this.selectedSpecialist != undefined && this.selectedPatient != undefined)
     {
-      const appointment = new Turno({day: newDay, patient: this.selectedPatient, specialist: this.selectedSpecialist, state: 'Pendiente'});
+      const appointment = new Turno({day: newDay, patient: this.selectedPatient, specialist: this.selectedSpecialist, state: 'Pendiente', speciality: this.selectedSpeciality});
       try {
-        this.validateAppointment();
+        this.validateAppointment(newDay);
         await this.aService.saveAppointmenInStore(appointment);
         await this.alertService.showAlert({icon: 'success', message: 'Turno creado con exito!', timer: 2000});
         this.router.navigateByUrl('turnos/turnos');
@@ -204,34 +237,39 @@ export class RequestAppointmentComponent implements OnInit{
     }  
   }
 
-  protected validateAppointment(): boolean{
-    let retorno = true;
-    this.aService.appointments.forEach((app) => {
-      if(app.specialist.userId == this.selectedSpecialist?.userId && this.selectedDay.timeStart == app.day.timeStart)
+  protected hideTaken(id: string, date: string, hour: number){
+    let retorno = false;
+    this.aService.appointments.forEach(turno => {
+      if(turno.day.date == date && turno.day.timeStart == hour.toString() && id == turno.specialist.userId)
       {
-        throw new Error("El turno ya se encuentra ocupado!");
+        retorno = true;
       }
     });
     return retorno;
   }
 
+  protected validateAppointment(day: Day) {
+    this.aService.appointments.forEach((app) => {
+      if(app.specialist.userId == this.selectedSpecialist?.userId && day.timeStart == app.day.timeStart && day.date == app.day.date)
+      {
+        throw new Error("El turno ya se encuentra ocupado!");
+      }
+    });
+  }
+
   protected return(option: string){
     switch (option)
     {
-      case "B":
+      case "A":
+        this.hiddenSpecialist = false;
         this.hiddenSpeciality = true;
-        this.hiddenSpecialist = false;
         break;
-      case "C":
-        this.hiddenSpecialist = false;
+      case "B":
+        this.hiddenSpeciality = false;
         this.hiddenSchedule = true;
         break;
-      case "D":
+      case "C":
         this.hiddenSchedule = false;
-        this.hiddenHours = true;
-        break;
-      case "E":
-        this.hiddenHours = false;
         this.hiddenPatient = true;
         break;
     }

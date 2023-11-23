@@ -1,0 +1,10 @@
+.boton{
+    background-color: rgb(124, 194, 124);
+    border-radius: 8px;
+    border: 2px solid rgb(1, 49, 1);
+}
+.boton:hover{
+    background-color: rgb(1, 53, 1);
+    box-shadow: 0 0 20px rgba(26, 243, 2, 0.799);
+    color: white;
+}

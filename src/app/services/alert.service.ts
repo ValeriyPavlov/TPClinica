@@ -55,10 +55,14 @@ export class AlertService {
         {
           return result.value;
         }
+        else
+        {
+          return "";
+        }
       }
       else
       {
-        return false;
+        return "";
       }
     });
   }

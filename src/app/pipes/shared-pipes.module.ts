@@ -5,6 +5,7 @@ import { KeysToSpanishPipe } from './keys-to-spanish.pipe';
 import { SpecialistPipe } from './specialist.pipe';
 import { SpecialityPipe } from './speciality.pipe';
 import { HoursPipe } from './hours.pipe';
+import { DatesPipe } from './dates.pipe';
 
 
 
@@ -14,7 +15,8 @@ import { HoursPipe } from './hours.pipe';
     KeysToSpanishPipe,
     SpecialistPipe,
     SpecialityPipe,
-    HoursPipe
+    HoursPipe,
+    DatesPipe
   ],
   imports: [
     CommonModule
@@ -24,8 +26,8 @@ import { HoursPipe } from './hours.pipe';
     KeysToSpanishPipe,
     SpecialistPipe,
     SpecialityPipe,
-    HoursPipe
-
+    HoursPipe,
+    DatesPipe
   ]
 })
 export class SharedPipesModule { }

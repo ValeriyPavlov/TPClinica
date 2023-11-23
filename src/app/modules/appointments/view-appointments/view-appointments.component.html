@@ -29,7 +29,7 @@
                 {{element.specialist.lastName}}, {{element.specialist.name}}
             </td>
             <td *ngIf="listOfAppointmentsFiltered.length > 0" class="text-center">
-                {{element.specialist.speciality.description}}
+                {{element.speciality}}
             </td>
             <td *ngIf="listOfAppointmentsFiltered.length > 0" class="text-center">
                 {{element.patient.lastName}}, {{element.patient.name}}
@@ -54,7 +54,7 @@
       </table>
 </div>
 
-<div *ngIf="this.uService.userLogged?.userRole == 'especialista'">
+<div *ngIf="this.uService.userLogged?.userRole == 'especialista'" [hidden]="hiddenDiagnose">
     <div class="row w-100 justify-content-center">
         <div class="col-5">
             <h3 class="row w-100 justify-content-center">Listado de turnos:</h3>
@@ -65,7 +65,6 @@
             (keyup)="searchAppoinment($event)"/>
         </div>
     </div>
-    
     <table *ngIf="this.aService.appointments" class="table table-striped table-ligth">
         <thead class="table-info">
           <tr>
@@ -84,7 +83,7 @@
                 {{element.specialist.lastName}}, {{element.specialist.name}}
             </td>
             <td *ngIf="listOfAppointmentsFiltered.length > 0" class="text-center">
-                {{element.specialist.speciality.description}}
+                {{element.speciality}}
             </td>
             <td *ngIf="listOfAppointmentsFiltered.length > 0" class="text-center">
                 {{element.patient.lastName}}, {{element.patient.name}}
@@ -112,7 +111,7 @@
 <div *ngIf="this.uService.userLogged?.userRole == 'paciente'">
     <div class="row w-100 justify-content-center">
         <div class="col-5">
-            <h3 class="row w-100 justify-content-center">Listado de turnos:</h3>
+            <h3 class="row w-100 justify-content-center p-2">Listado de turnos:</h3>
           <input
             class="form-control p-2 mb-2"
             type="text"
@@ -139,7 +138,7 @@
                 {{element.specialist.lastName}}, {{element.specialist.name}}
             </td>
             <td *ngIf="listOfAppointmentsFiltered.length > 0" class="text-center">
-                {{element.specialist.speciality.description}}
+                {{element.speciality}}
             </td>
             <td *ngIf="listOfAppointmentsFiltered.length > 0" class="text-center">
                 {{element.patient.lastName}}, {{element.patient.name}}
@@ -162,6 +161,10 @@
           </tr>
         </tbody>
       </table>
+</div>
+
+<div [hidden]="!hiddenDiagnose">
+  <app-diagnosis (eventSendDiagnosis)="handleDiagnosis($event)"></app-diagnosis>
 </div>
 
 

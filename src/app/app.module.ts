@@ -19,7 +19,7 @@ import { RatingModule } from 'primeng/rating';
 @NgModule({
   declarations: [
     AppComponent,
-    NavBarComponent,
+    NavBarComponent
   ],
   imports: [
     BrowserModule,
@@ -33,13 +33,13 @@ import { RatingModule } from 'primeng/rating';
     LoaderModule,
     NgxSpinnerModule, 
     BrowserAnimationsModule,
-    RatingModule,
+    RatingModule
   ],
   exports: [
     LoaderModule,
     NgxSpinnerModule,
     BrowserAnimationsModule,
-    RatingModule,
+    RatingModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [],

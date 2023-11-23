@@ -8,7 +8,10 @@ import { Especialista } from '../entities/Specialist';
 import { collection, count, getFirestore, onSnapshot, query } from 'firebase/firestore';
 import { initializeApp } from 'firebase/app';
 import { environment } from 'src/environments/environments';
-import { firstValueFrom } from 'rxjs';
+import * as XLSX from 'xlsx';
+import { jsPDF } from 'jspdf';
+import { Diagnostico } from '../entities/MedicalRecord';
+import { Turno } from '../entities/Appointment';
 
 
 @Injectable({
@@ -142,6 +145,93 @@ export class UserService {
   public getAllUsers() {
     return this.firebaseStoreProvider.getCollection('usuarios');
   }
+
+
+  public exportUsersToXls(users: User[], fileName: string) {
+    const usersMapped = users.map((user) => {
+      return {
+        Apellido: `${user.lastName}`,
+        Nombre: `${user.name}`,
+        Email: `${user.email}`,
+        Dni: `${user.dni}`,
+        Edad: `${user.age}`,
+        Rol: `${user.userRole}`,
+      };
+    });
+    const workSheet = XLSX.utils.json_to_sheet(usersMapped);
+    const workBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workBook, workSheet, 'usuarios');
+    XLSX.writeFile(workBook, `${fileName}.xlsx`);
+  }
+
+  public createPdf(appointments: Turno[], user: User) {
+    const pdfFile = new jsPDF('portrait', 'px', 'a4');
+    const image = new Image();
+
+    const pageHeight = pdfFile.internal.pageSize.height;
+    image.src = '../../assets/img/icono.png';
+    pdfFile.text('HISTORIAL CLINICO DE:  ' + user.lastName + ', ' + user.name, 140, 70);
+    const date = new Date().toLocaleString();
+    pdfFile.addImage(image, 'PNG', 10, 10, 75, 75);
+    pdfFile.text('Fecha Emisión: ' + date, 240, 20);
+    let y = 50;
+    let position = this.updatePosition();
+
+    //console.log("Height",pageHeight); 631
+    appointments.forEach((app) => {
+
+      if(y <= pageHeight){
+        y += 200;
+      }
+      else
+      {
+        pdfFile.addPage();
+        position = this.updatePosition(true);
+        y = 35;
+      }
+
+      pdfFile.text(
+        `Fecha: ${(app.day.dayOfWeek).toUpperCase()} - ${app.day.date}`,
+        35,
+        position()
+      );
+      pdfFile.text(
+        `Especialidad: ${app.speciality}`,
+        35,
+        position()
+      );
+      pdfFile.text(
+        `Especialista: ${app.specialist.lastName}, ${app.specialist.name}`,
+        35,
+        position()
+      );
+      let diagnosis = app.diagnosis as Diagnostico;
+      pdfFile.text(`Altura: ${diagnosis.height} Cm`, 35, position());
+      pdfFile.text(`Peso: ${diagnosis.weight} Kg`, 35, position());
+      pdfFile.text(`Temperatura: ${diagnosis.temperature} C°`, 35, position());
+      pdfFile.text(`Presion: ${diagnosis.pressure} mmHg`, 35, position());
+
+      if (diagnosis.dynamicData) {
+        diagnosis.dynamicData.forEach((elem) => {
+          pdfFile.text(`${[elem.key]}: ${elem.value}`, 35, position());
+        });
+      }
+      position();
+    });
+
+    const fileName = `Historia_Clinica_${user.lastName}_${user.name}_al_${date}.pdf`;
+    pdfFile.save(fileName);
+  }
+
+
+  private updatePosition(reset: boolean = false) {
+    let position = 120;
+    if(reset){
+      position = 35
+    }
+    return () => (position += 15)
+  }
+
 }
 
 const app = initializeApp(environment.firebaseConfig);

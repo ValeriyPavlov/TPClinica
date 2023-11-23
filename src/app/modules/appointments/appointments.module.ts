@@ -8,13 +8,15 @@ import { ViewAppointmentsComponent } from './view-appointments/view-appointments
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RatingModule } from 'primeng/rating';
 import { SharedPipesModule } from 'src/app/pipes/shared-pipes.module';
+import { DiagnosisComponent } from './view-appointments/diagnosis/diagnosis.component';
 
 
 @NgModule({
   declarations: [
     AppointmentsComponent,
     RequestAppointmentComponent,
-    ViewAppointmentsComponent
+    ViewAppointmentsComponent,
+    DiagnosisComponent
   ],
   imports: [
     CommonModule,

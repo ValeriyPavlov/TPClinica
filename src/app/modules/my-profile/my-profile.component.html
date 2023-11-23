@@ -1,4 +1,4 @@
-<section class="profile">
+<section class="profile" *ngIf="!hiddenProfile" @fadeIn>
         <article class="row justify-content-center h-100 m-5 p-2 align-items-center">
             <div class="bg-light shadow p-1 rounded col-lg-5 col-md-6 col-sm-8 card mb-3" style="max-width: 800px">
                 <div class="col g-0 align-items-center bg-beige" *ngIf="this.uService.userLogged">
@@ -23,19 +23,34 @@
                         <h5 class="m-4">Horarios:</h5>
                         <div class="d-flex flex-column justify-content-center">
                             <h5 *ngFor="let item of this.schedule.days">
-                                {{item.dayOfWeek}}: {{item.timeStart}} a {{item.timeEnd}}
+                                {{item.dayOfWeek}}: {{item.timeStart}} a {{item.timeEnd}} hs
                             </h5>
                         </div>
                     </div>
                 </div>
             </div>
+            <div *ngIf="uService.userLogged?.userRole=='paciente'" class="d-flex justify-content-center">
+                <button (click)="getMedicalRecord()" class="btn boton" style="width: 200px;">Historia Clínica</button>
+            </div>
+
             <div *ngIf="uService.userLogged?.userRole=='especialista'">
                 <div class="d-flex align-items-center justify-content-center">
                     <button (click)="showFormSchedule()" [hidden]="showSchedule" class="btn btn-warning">Establecer Disponibilidad Horaria</button>
                 </div>
-            <div [hidden]="!showSchedule">
-                <app-schedule [showSchedule]="showSchedule" (eventShowSchedule)="handlerUpdateScheduleView($event)"></app-schedule>
-            </div>
+                <div [hidden]="!showSchedule">
+                    <app-schedule [showSchedule]="showSchedule" (eventShowSchedule)="handlerUpdateScheduleView($event)"></app-schedule>
+                </div>
             </div>
         </article>
 </section>
+
+<div [hidden]="!hiddenProfile">
+    <div class="d-flex flex-row align-items-center justify-content-center m-2 p-2">
+        <button title="Volver" class="col-sm-1 col-md-2 col-8 btn btn-warning" (click)="return()">
+            <i class="fa-solid fa-circle-arrow-left"></i>Volver
+        </button>
+    </div>
+    <app-history [selectedUser]="selectedUser"></app-history>
+</div>
+
+

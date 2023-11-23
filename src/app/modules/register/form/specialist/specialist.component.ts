@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { Schedule } from 'src/app/entities/Schedule';
 import { Especialista } from 'src/app/entities/Specialist';
 import { Especialidad } from 'src/app/entities/Speciality';
 import { AlertService } from 'src/app/services/alert.service';
@@ -21,6 +22,7 @@ export class SpecialistComponent {
   protected formSpecialistRegister: FormGroup;
   protected listOfSpecialities?: Especialidad[];
   protected showOtherSpeciality?: boolean;
+  protected selectedSpecialitys: string[] = [];
 
   constructor(private readonly userService: UserService, private readonly alertService: AlertService, private readonly formBuilder: FormBuilder,private readonly specialitiesService: SpecialityService, public sService: NgxSpinnerService) {
     this.setSpecialities();
@@ -31,7 +33,8 @@ export class SpecialistComponent {
       lastName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(25)]],
       age: ['', [Validators.required, Validators.min(18), Validators.max(90)]],
       dni: ['', [Validators.required, Validators.min(10000000), Validators.max(99999999)]],
-      speciality: ['',[Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
+      speciality: ['', [Validators.required]],
+      otherSpeciality: [''],
       email: ['', [Validators.required, Validators.email]],
       profilePhoto: ['', Validators.required],
       password: ['',[Validators.required, Validators.minLength(6), Validators.maxLength(15)]],
@@ -63,6 +66,13 @@ export class SpecialistComponent {
     }
   }
 
+  protected addOtherSpec(){
+    if(this.formSpecialistRegister.controls['otherSpeciality'].value != undefined && this.formSpecialistRegister.controls['otherSpeciality'].value != "" && !this.selectedSpecialitys.includes(this.formSpecialistRegister.controls['otherSpeciality'].value))
+    {
+      this.selectedSpecialitys.push(this.formSpecialistRegister.controls['otherSpeciality'].value);
+    }
+  }
+
 
   protected return() {
     this.showForm = !this.showForm;
@@ -70,23 +80,39 @@ export class SpecialistComponent {
   }
 
 
-  protected selectSpeciality(value: string) {
-    if (value === 'Otro') {
-      this.showOtherSpeciality = true;
-    } else {
-      this.showOtherSpeciality = false;
-    }
+  protected selectOtherSpeciality() {
+    this.showOtherSpeciality = !this.showOtherSpeciality;
   }
 
+  protected selectSpeciality($event: Event) {
+    const input = $event.target as HTMLInputElement;
+
+    if (input.checked) 
+    {
+      this.selectedSpecialitys.push(input.value);
+    } 
+    else 
+    {
+      const index = this.selectedSpecialitys.findIndex((d) => d === input.value);
+      if (index > -1) 
+      {
+        this.selectedSpecialitys.splice(index, 1);
+      }
+    }
+    console.log(this.selectedSpecialitys);
+  }
 
   private validateSpeciality() {
-    if (this.listOfSpecialities?.some((speciality) => this.showOtherSpeciality && speciality.description === this.formSpecialistRegister.controls['speciality'].value) || this.formSpecialistRegister.controls['speciality'].value.toLowerCase() === 'otro') {
-      throw new Error('La nueva especialidad debe ser valida e irrepetible');
+    if (this.listOfSpecialities?.some((speciality) => this.showOtherSpeciality && speciality.description === this.formSpecialistRegister.controls['otherSpeciality'].value)) {
+      throw new Error('La especialidad ingresada ya existe');
     }
     else
     {
-      let speciality = new Especialidad({description: this.formSpecialistRegister.controls['speciality'].value, image: "https://firebasestorage.googleapis.com/v0/b/pruebaapp-c7145.appspot.com/o/default_spec.png?alt=media&token=2c12d342-adef-4ed0-b4e2-82ba064f6f77"});
-      this.specialitiesService.addSpeciality(speciality);
+      if(this.formSpecialistRegister.controls['otherSpeciality'].value != "" && !this.listOfSpecialities?.includes(this.formSpecialistRegister.controls['otherSpeciality'].value))
+      {
+        let speciality = new Especialidad({description: this.formSpecialistRegister.controls['otherSpeciality'].value, image: "https://firebasestorage.googleapis.com/v0/b/pruebaapp-c7145.appspot.com/o/default_spec.png?alt=media&token=2c12d342-adef-4ed0-b4e2-82ba064f6f77"});
+        this.specialitiesService.addSpeciality(speciality);
+      }
     }
   }
 
@@ -115,13 +141,10 @@ export class SpecialistComponent {
 
 
   private createUser() {
-    const speciality = new Especialidad({description: this.formSpecialistRegister.value.speciality});
-    if (this.showOtherSpeciality) {
-      speciality.image = 'especialidad_default.png';
-    } 
-    else {
-      speciality.image = `${this.formSpecialistRegister.value.speciality}.png`;
-    }
-    return new Especialista({...this.formSpecialistRegister.value, verifiedByAdmin: false, speciality});
+    let specialitys:string[] = [];
+    this.selectedSpecialitys.forEach(spec => {
+      specialitys.push(spec);
+    });
+    return new Especialista({...this.formSpecialistRegister.value, verifiedByAdmin: false, speciality: {description: specialitys, schedule: new Schedule()}});
   }
 }

@@ -15,7 +15,7 @@
                     <th class="text-center fw-bold" *ngFor="let item of list[0] | keyvalue">
                         {{ item.key | keysToSpanish | uppercase }}
                     </th>
-                    <th *ngIf="roleOption === 'especialista'">Accion</th>
+                    <th *ngIf="roleOption !== 'admin'">Accion</th>
                 </tr>
             </thead>
             <tbody class="table-group-divider">
@@ -47,6 +47,9 @@
                     <td class="text-center" *ngIf="roleOption === 'especialista'">
                         <i *ngIf="(element | specialist).verifiedByAdmin === false" title="Habilitar" class="btn btn-outline-success" (click)="validateSpecialist(element)"><img src="../../../../assets/img/check.png" alt="Habilitar" style="width: 35px; height: 35px;"></i>
                         <i *ngIf="(element | specialist).verifiedByAdmin === true" title="Inhabilitar" class="btn btn-outline-danger" (click)="validateSpecialist(element)"><img src="../../../../assets/img/cross.png" alt="Inhabilitar" style="width: 35px; height: 35px;"></i>
+                    </td>
+                    <td class="text-center" *ngIf="roleOption === 'paciente'">
+                        <button class="btn btn-warning" style="width: 80px; height: 35px;" (click)="selectUser(element)">Historial</button>
                     </td>
                 </tr>
             </tbody>

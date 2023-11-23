@@ -1,4 +1,4 @@
-<div class="container card d-flex flex-col align-items-center justify-content-center">
+<div class="container card d-flex flex-col align-items-center justify-content-center" transition-style="in:wipe:down">
     <H3>Seccion: Solicitar Turno</H3>
     <img src="../../../../assets/img/icono.png" alt="" style="width: 200px; height: 200px;">
     
@@ -8,10 +8,10 @@
             <div>
                 <h4>Datos del turno:</h4>
                 <div>
-                    Especialidad: {{selectedSpeciality?.description}}
+                    Especialista: {{selectedSpecialist?.lastName}}, {{selectedSpecialist?.name}}
                 </div>
                 <div>
-                    Especialista: {{selectedSpecialist?.lastName}}, {{selectedSpecialist?.name}}
+                    Especialidad: {{selectedSpeciality}}
                 </div>
                 <div>
                     Fecha: {{selectedDay.date}} ({{selectedDay.dayOfWeek}})
@@ -25,12 +25,12 @@
             </div>
         </div>
 
-        <div [hidden]="hiddenSpecialist">
+        <div [hidden]="hiddenSpecialist" @fadeIn>
             <div class="card m-2 p-2">
                 <p class="fw-bold m-3 p-1">Elija un especialista:</p>
                 <div class="d-flex flex-row">
                     <div class="d-flex flex-column m-1 p-1" *ngFor="let specialist of listOfSpecialists">
-                        <button class="btn boton m-1 p-1" (click)="selectSpecialist(specialist)" style="width: 100px;"><img src="{{specialist.profilePhoto}}" alt="foto" style="height: 70px; width: 60px;"><label for="specialist">{{specialist.lastName}}, {{specialist.name}}</label></button>
+                        <button class="btn boton m-1 p-1" (click)="selectSpecialist(specialist)" style="width: 150px; height: 100px;"><img src="{{specialist.profilePhoto}}" alt="foto" style="height: 70px; width: 60px;"><label for="specialist">{{specialist.lastName}}, {{specialist.name}}</label></button>
                     </div>
                 </div>
             </div>
@@ -38,41 +38,41 @@
 
         <div [hidden]="hiddenSpeciality">
             <div class="card m-2 p-2">
-                <button type="button" class="btn btn-warning" (click)="return('B')"><i class="fa-solid fa-circle-arrow-left">Volver</i></button>
+                <button type="button" class="btn btn-warning" (click)="return('A')"><i class="fa-solid fa-circle-arrow-left">Volver</i></button>
                 <p class="fw-bold m-3 p-1">Elija una especialidad:</p>
-                <div class="col-sm-6">
-                    <button title="{{selectedSpecialist?.speciality?.description}}" class="btn boton2 rounded-circle"><img src="{{selectedSpecialist?.speciality?.image}}" alt="foto_especialidad"></button>
-                    <!-- <input type="button" value="{{selectedSpecialist?.speciality?.description}}"  class="btn btn-primary m-1 p-1" (click)="selectSpeciality(selectedSpecialist!.speciality)"> -->
+                <div class="d-flex flex-row">
+                    <div class="m-1 p-1 d-flex flex-row align-items-center justify-content-center" *ngFor="let speciality of selectedSpecialist?.speciality?.description">
+                        <button title="{{speciality}}" class="btn boton rounded-circle"><img src="{{getSpecialityPhoto(speciality)}}" alt="foto_especialidad" (click)="selectSpeciality(speciality)"></button>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div [hidden]="hiddenSchedule">
             <div class="card m-2 p-2">
-                <button type="button" class="btn btn-warning" (click)="return('C')"><i class="fa-solid fa-circle-arrow-left">Volver</i></button>
-                <p class="fw-bold m-3 p-1"> Seleccione el dia del turno:</p>
-                <div *ngFor="let day of availableDays">
-                    <input type="button" value="{{day.date}} ({{day.dayOfWeek}})" (click)="selectDay(day)" class="btn btn-primary m-1 p-1">
-                </div>
-            </div>
-        </div>
-
-        <div [hidden]="hiddenHours">
-            <div class="card m-2 p-2">
-                <button type="button" class="btn btn-warning" (click)="return('D')"><i class="fa-solid fa-circle-arrow-left">Volver</i></button>
-                <p class="fw-bold m-3 p-1"> Seleccione el horario del turno:</p>
-                <div *ngFor="let hour of availableHours">
-                    <input type="button" value="{{hour | hours}}hs - {{hour+this.appointmentDuration | hours}}hs" (click)="selectHours(hour)" class="btn btn-primary m-1 p-1">
+                <button type="button" class="btn btn-warning" (click)="return('B')"><i class="fa-solid fa-circle-arrow-left">Volver</i></button>
+                <p class="fw-bold m-3 p-1"> Seleccione la fecha y el horario:</p>
+                <div class="d-flex flex-row align-items-center justify-content-center">
+                    <div *ngFor="let day of availableDays">
+                        <div class="card d-flex flex-column align-items-center justify-content-center p-1 m-1">
+                            <h5 class="fw-bold">{{day.dayOfWeek.toUpperCase()}}</h5>
+                            <div *ngFor="let time of setHours(day)">
+                                <button class="btn botonF m-1 p-2" (click)="selectAppointment(day, time)" [disabled]="hideTaken(selectedSpecialist!.userId, day.date!, time)">{{day.date | dates }} {{time | hours}}</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div [hidden]="hiddenPatient">
             <div class="card m-2 p-2">
-                <button type="button" class="btn btn-warning" (click)="return('E')"><i class="fa-solid fa-circle-arrow-left">Volver</i></button>
+                <button type="button" class="btn btn-warning" (click)="return('C')"><i class="fa-solid fa-circle-arrow-left">Volver</i></button>
                 <p class="fw-bold m-3 p-1">Elija un paciente:</p>
-                <div class="col-sm-6" *ngFor="let patient of listOfPatients">
-                    <input type="button" value="{{patient.lastName}}, {{patient.name}}" class="btn btn-primary m-1 p-1" (click)="selectPatient(patient)">
+                <div class="d-flex flex-row align-items-center justify-content-center">
+                    <div *ngFor="let patient of listOfPatients">
+                        <button (click)="selectPatient(patient)" class="btn boton rounded-circle m-2 p-2 d-flex flex-column justify-content-center align-items-center" style="height: 150px; width: 150px;"><img src="{{patient.profilePhoto}}" alt="foto_paciente" style="height: 50px; width: 50px;">{{patient.lastName}}, {{patient.name}}</button>
+                    </div>
                 </div>
             </div> 
         </div>

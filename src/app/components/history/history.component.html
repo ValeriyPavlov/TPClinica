@@ -1,0 +1,61 @@
+
+<div class="d-flex flex-column justify-content-center align-items-center m-3 p-3">
+    <div *ngIf="this.uService.userLogged?.userRole =='admin' && selectedUser">
+        <h2 class="d-flex justify-content-center align-items-center m-1 p-1">Historia Clínica de {{selectedUser.lastName}}, {{selectedUser.name}}</h2>
+    </div>
+    <div *ngIf="this.uService.userLogged?.userRole =='paciente'">
+        <h2 class="d-flex justify-content-center align-items-center m-1 p-1">Mi Historia Clínica</h2>
+        <div class="d-flex justify-content-center align-items-center m-1 p-1">
+            <button (click)="downloadMedicalRecord()" class="btn boton">Descargar <img src="../../../assets/img/pdf.png" alt="pdf" style="height: 60px; width: 60px;"></button>
+        </div>
+    </div>
+
+    <div class="w-75 m-5 p-2 card bg-beige" *ngIf="selectedUser != undefined">
+        
+
+        <div class="d-flex flex-column" *ngIf="myAppointments.length > 0">
+            <div *ngFor="let turno of myAppointments; let i = index" class="card m-1 p-1">
+        
+                <div class="d-flex flex-row m-1 p-1">
+                    <div class="titles">
+                        Fecha y Hora:
+                    </div>
+                    <div style="padding-left: 20px;">
+                        {{turno.day.date}} {{turno.day.timeStart | hours}} - {{turno.day.timeEnd | hours}}hs
+                    </div>
+                    <div class="titles padL">
+                        Especialista: 
+                    </div>
+                    <div>
+                        <img src="{{turno.specialist.profilePhoto}}" alt="foto_especialista" style="height: 100px; width: 100px;"> {{turno.specialist.lastName}}, {{turno.specialist.name}}
+                    </div>
+                    <div class="titles padL">
+                        Especialidad:
+                    </div>
+                    <div>
+                        <img src="{{getSpecialityPhoto(turno.speciality!)}}" alt="foto_especialidad" style="height: 100px; width: 100px;"> {{turno.speciality}}
+                    </div>
+                </div>
+
+                <div class="d-flex flex-row m-1 p-1">
+                    <div class="titles">
+                        Reseña:
+                    </div>
+                    <div style="padding-left: 20px;">
+                        <p class="texto-limitado">{{turno.review}}</p>
+                    </div>
+                    <div class="titles padL">
+                        Diagnostico:
+                    </div>
+                    <div style="padding-left: 20px;">
+                        <h5 [attr.id]="'item-' + i">{{getDiagnosis(turno, i)}}</h5>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div *ngIf="myAppointments.length == 0">
+            <h3>El paciente seleccionado aun no tiene Historial Clinico.</h3>
+        </div>
+    </div>
+</div>
