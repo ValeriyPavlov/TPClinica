@@ -94,16 +94,18 @@ export class HistoryComponent implements OnChanges{
     return imagen;
   }
 
-  protected getDiagnosis(item: any, index: number){
-    let ref = document.getElementById("item-" + index);
+  protected getDiagnosis(item: Turno){
     let diag = item.diagnosis as Diagnostico;
-    let retorno = `Altura: ${diag.height} cm<br>Peso: ${diag.weight} kg<br>Temperatura: ${diag.temperature} C°<br>Presion: ${diag.pressure} mmHg`;
+    let retorno: string[] = [];
+    retorno.push(`Altura: ${diag.height} cm`);
+    retorno.push(`Peso: ${diag.weight} kg`);
+    retorno.push(`Temperatura: ${diag.temperature} C°`);
+    retorno.push(`Presion: ${diag.pressure} mmHg`);
+    
     diag.dynamicData?.forEach(e => {
-      retorno = retorno + `<br>${e.key}: ${e.value}`;
+      retorno.push(`${e.key}: ${e.value}`);
     });
-    if(ref != null){
-      ref.innerHTML = retorno;
-    }
+    return retorno;
   }
 
   protected downloadMedicalRecord(){
@@ -120,6 +122,4 @@ export class HistoryComponent implements OnChanges{
       this.alertService.showAlert({icon: 'error', message: 'Debe seleccionar una opcion para descargar', timer: 2000});
     }
   }
-
-
 }
