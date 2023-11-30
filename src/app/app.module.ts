@@ -13,7 +13,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LoaderModule } from './components/loader/loader.module';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { RatingModule } from 'primeng/rating';
-
+import { NgChartsModule } from 'ng2-charts';
 
 
 @NgModule({
@@ -33,13 +33,16 @@ import { RatingModule } from 'primeng/rating';
     LoaderModule,
     NgxSpinnerModule, 
     BrowserAnimationsModule,
-    RatingModule
+    RatingModule,
+    NgChartsModule,
+
   ],
   exports: [
     LoaderModule,
     NgxSpinnerModule,
     BrowserAnimationsModule,
-    RatingModule
+    RatingModule,
+    NgChartsModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [],

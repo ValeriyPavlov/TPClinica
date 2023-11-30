@@ -164,6 +164,34 @@ export class UserService {
     XLSX.writeFile(workBook, `${fileName}.xlsx`);
   }
 
+  public exportUserToXls(appointments: Turno[], user: User, fileName: string){
+    const appointmentsMapped = appointments.map((app) =>{
+      return {
+        Especialista: `${app.specialist.lastName}, ${app.specialist.name}`,
+        Paciente: `${app.patient.lastName}, ${app.patient.name}`,
+        Especialidad: `${app.speciality}`,
+        Fecha: `${app.day.date}`,
+        HoraInicio: this.formatHours(app.day.timeStart),
+        HoraFin: this.formatHours(app.day.timeEnd),
+      };
+    });
+    const workSheet = XLSX.utils.json_to_sheet(appointmentsMapped);
+    const workBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workBook, workSheet, 'usuarios');
+    XLSX.writeFile(workBook, `${fileName}.xlsx`);
+  }
+
+  public formatHours(hour: string){
+    if(hour.includes('.'))
+    {
+      return (Math.floor(parseFloat(hour))).toString() + ':30';
+    }
+    else
+    {
+      return hour + ':00';
+    }
+  }
+
   public createPdf(appointments: Turno[], user: User) {
     const pdfFile = new jsPDF('portrait', 'px', 'a4');
     const image = new Image();

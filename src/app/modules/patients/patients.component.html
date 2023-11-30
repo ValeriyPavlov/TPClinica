@@ -2,71 +2,14 @@
     <div class="w-100 row justify-content-center justify-content-sm-start p-2 m-0">
     </div>
     <div class="table-responsive">
-        <div class="d-flex align-items-center justify-content-center">
-            <h2>Pacientes:</h2>
+        <div class="d-flex align-items-center justify-content-center p-2 m-2">
+            <h2 style="text-decoration-line: underline;">Pacientes de {{this.userService.userLogged?.lastName}}, {{this.userService.userLogged?.name}}:</h2>
         </div>
-        <table *ngIf="list" class="table table-striped table-ligth">
-            <thead class="table-dark">
-                <tr>
-                    <th class="text-center fw-bold">
-                        Nombre
-                    </th>
-                    <th class="text-center fw-bold">
-                        Apellido
-                    </th>
-                    <th class="text-center fw-bold">
-                        DNI
-                    </th>
-                    <th class="text-center fw-bold">
-                        Edad
-                    </th>
-                    <th class="text-center fw-bold">
-                        ID
-                    </th>
-                    <th class="text-center fw-bold">
-                        Email
-                    </th>
-                    <th class="text-center fw-bold">
-                        Obra Social
-                    </th>
-                    <th class="text-center fw-bold">
-                        Foto
-                    </th>
-                    <th class="text-center fw-bold">Accion</th>
-                </tr>
-            </thead>
-            <tbody class="table-group-divider">
-                <tr *ngFor="let item of list">
-                    <td class="text-center">
-                        {{item.name}}
-                    </td>
-                    <td class="text-center">
-                        {{item.lastName}}
-                    </td>
-                    <td class="text-center">
-                        {{item.dni}}
-                    </td>
-                    <td class="text-center">
-                        {{item.age}}
-                    </td>
-                    <td class="text-center">
-                        {{item.userId}}
-                    </td>
-                    <td class="text-center">
-                        {{item.email}}
-                    </td>
-                    <td class="text-center">
-                        {{item.socialWork}}
-                    </td>
-                    <td class="text-center">
-                        <img class="img-fluid rounded rounded-3" src="{{ item.profilePhoto }}" alt="foto_perfil" style="height: 50px; width: 50px;"/>
-                    </td>
-                    <td class="text-center">
-                        <button class="btn btn-warning" style="width: 80px; height: 35px;" (click)="selectUser(item)">Historial</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="d-flex flex-row align-items-center justify-content-center p-2 m-2">   
+            <div *ngFor="let paciente of list" class="d-flex flex-row align-items-center justify-content-center p-2 m-2">
+                <button (click)="selectUser(paciente)" class="col-xxl-1 col-sm-2 col-6 m-1 p-3 rounded-circle d-flex flex-column align-items-center justify-content-center boton" style="width: 200px; height: 200px;"><img src="{{paciente.profilePhoto}}" alt="foto_paciente" style="height: 100px; width: 100px;" class="card-img img-fluid rounded-circle"><h5>{{paciente.lastName}}, {{paciente.name}}</h5></button>
+            </div>
+        </div>
     </div>
 </section>
 
@@ -82,3 +25,5 @@
         <app-history [selectedUser]="selectedUser"></app-history>
     </div>
 </div>
+
+

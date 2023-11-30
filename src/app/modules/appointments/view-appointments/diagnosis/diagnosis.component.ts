@@ -26,7 +26,8 @@ export class DiagnosisComponent {
   }
 
   protected async sendDiagnosis() {
-    if (this.formDiagnosis.valid) {const diagnosis = new Diagnostico({...this.formDiagnosis.value});
+    if (this.formDiagnosis.valid) {
+      const diagnosis = new Diagnostico({...this.formDiagnosis.value});
       if (this.aditionalField.length > 0) {
         const additionalData: DynamicData[] = [];
         this.aditionalField.forEach((field) => {

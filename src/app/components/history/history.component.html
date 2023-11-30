@@ -1,12 +1,19 @@
 
 <div class="d-flex flex-column justify-content-center align-items-center m-3 p-3">
     <div *ngIf="this.uService.userLogged?.userRole =='admin' && selectedUser">
-        <h2 class="d-flex justify-content-center align-items-center m-1 p-1">Historia Clínica de {{selectedUser.lastName}}, {{selectedUser.name}}</h2>
+        <h2 class="d-flex justify-content-center align-items-center m-1 p-1">Historia Clínica de {{selectedUser.lastName}}, {{selectedUser.name}}:</h2>
     </div>
     <div *ngIf="this.uService.userLogged?.userRole =='paciente'">
-        <h2 class="d-flex justify-content-center align-items-center m-1 p-1">Mi Historia Clínica</h2>
+        <h2 class="d-flex justify-content-center align-items-center m-1 p-1">Mi Historia Clínica:</h2>
         <div class="d-flex justify-content-center align-items-center m-1 p-1">
-            <button (click)="downloadMedicalRecord()" class="btn boton">Descargar <img src="../../../assets/img/pdf.png" alt="pdf" style="height: 60px; width: 60px;"></button>
+            <button (click)="downloadMedicalRecord()" class="btn boton m-2 p-2">Descargar <img src="../../../assets/img/pdf.png" alt="pdf" style="height: 60px; width: 60px;"></button>
+        </div>
+        <div class="d-flex justify-content-center align-items-center m-1 p-1">
+            <select name="specialist" id="specialist" class="form-select">
+                <option value="" disabled selected>Seleccione una opcion...</option>
+                <option value="all">TODOS</option>
+                <option value={{spec.userId}} *ngFor="let spec of listOfUniqueSpecialist">{{spec.lastName}}, {{spec.name}}</option>
+            </select>
         </div>
     </div>
 

@@ -6,22 +6,41 @@
     border-radius: 1rem;
   
     font-weight: bold;
-  }
+}
 
-  .boton{
+.boton{
     background-color: rgb(186, 231, 247);
-  }
-  .boton:hover{
+}
+.boton:hover{
     background-color: rgba(72, 1, 253);
     box-shadow: 0 0 20px rgba(97, 0, 200, 0.799);
-  }
+}
 
-  .boton2{
+.boton2{
     background-color: rgb(106, 195, 90);
     border: 2px solid black;
-  }
-  .boton2:hover{
+}
+.boton2:hover{
     background-color: rgb(2, 81, 15);
     box-shadow: 0 0 20px rgba(51, 138, 1, 0.799);
     color: white;
-  }
+}
+
+.botonFab{
+    border: 0px;
+    border-radius: 100%;
+    background-color: rgb(113, 212, 248);
+    box-shadow: 4px 4px 8px 0px rgba(0, 0, 0, 0.5);
+}
+
+.botonFab:hover{
+    background-color: rgb(54, 54, 153);
+    color: white;
+    box-shadow: 6px 6px 12px 0px rgba(0, 0, 0, 0.75);
+}
+
+#botones {
+    display: flex;
+    flex-wrap: wrap;
+}
+  

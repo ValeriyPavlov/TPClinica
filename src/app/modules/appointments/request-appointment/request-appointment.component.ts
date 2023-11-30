@@ -10,18 +10,31 @@ import { format } from 'date-fns';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { AlertService } from 'src/app/services/alert.service';
 import { Router } from '@angular/router';
-import { animate, style, transition, trigger } from '@angular/animations';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 const enterTransition = transition(':enter', [style({opacity: 0}), animate('1s ease-in', style({opacity:1}))]);
 const exitTransition = transition(':enter', [style({opacity: 1}), animate('500ms ease-out', style({opacity:0}))]);
 const fadeIn = trigger('fadeIn', [enterTransition]);
 const fadeOut = trigger('fadeOut', [exitTransition]);
+const slideInDownAnimation = trigger('routeAnimation', [state('*', style({opacity: 1, transform: 'perspective(500px) translateZ(0px)'})),
+    transition(':enter', [style({ opacity: 0, transform: 'perspective(500px) translateZ(-400px)'}), animate('10s ease')]),
+    transition(':leave', [animate('10s ease', style({ opacity: 0, transform: 'perspective(500px) translateZ(-400px)'}))])]);
+
+const slide = trigger('slideInDown', [
+      transition(':enter', [
+        style({ transform: 'translateY(-100%)' }),
+        animate('750ms ease-out', style({ transform: 'translateY(0)' })),
+      ]),
+      transition(":leave", [
+        animate('500ms ease-out', style({ transform: 'translateY(-100%)' })),
+      ])
+    ])
 
 @Component({
   selector: 'app-request-appointment',
   templateUrl: './request-appointment.component.html',
   styleUrls: ['./request-appointment.component.css'],
-  animations: [fadeIn, fadeOut]
+  animations: [fadeIn, fadeOut, slideInDownAnimation, slide]
 })
 export class RequestAppointmentComponent implements OnInit{
 

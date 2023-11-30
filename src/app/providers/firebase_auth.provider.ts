@@ -7,6 +7,8 @@ import { Admin } from '../entities/Admin';
 import { firstValueFrom } from 'rxjs';
 import { FirebaseStoreProvider } from './firebase_store.provider';
 import { FirebaseStorageProvider } from './firebase_storage.provider';
+import { LogService } from '../services/log.service';
+import { Log } from '../entities/Log';
 
 @Injectable({
   providedIn: 'root',
@@ -16,13 +18,11 @@ export class FirebaseAuthProvider {
   private __userAdmin: User | undefined;
   private _userLogged: User | undefined;
 
-  constructor(private readonly fireAuth: Auth, private readonly firebaseStoreProvider: FirebaseStoreProvider, private readonly firebaseStorageProvider: FirebaseStorageProvider) {
+  constructor(private readonly fireAuth: Auth, private readonly firebaseStoreProvider: FirebaseStoreProvider, private readonly firebaseStorageProvider: FirebaseStorageProvider, private readonly lService: LogService) {
     this.fireAuth.onAuthStateChanged((userFirebase) => {
       this.findUserFromSessionByEmail(userFirebase)
-        .then((user) => {
-          this._userLogged = user;
-        })
-        .catch((e) => console.warn(e));
+        .then((user) => {this._userLogged = user;})
+        .catch((err) => console.warn(err));
     });
   }
 
@@ -34,6 +34,8 @@ export class FirebaseAuthProvider {
       await this.validateEmailVerified(userCredential.user);
       await this.validateSpecialist(this._userLogged!);
     }
+    const ref = new Log(this.userLogged!);
+    await this.lService.saveLogInStore(ref);
     return this.userLogged;
   }
 

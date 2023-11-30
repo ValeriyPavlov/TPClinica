@@ -1,4 +1,4 @@
-<div class="container card d-flex flex-col align-items-center justify-content-center" transition-style="in:wipe:down">
+<div class="container card d-flex flex-col align-items-center justify-content-center" @slideInDown>
     <H3>Seccion: Solicitar Turno</H3>
     <img src="../../../../assets/img/icono.png" alt="" style="width: 200px; height: 200px;">
     
@@ -25,7 +25,7 @@
             </div>
         </div>
 
-        <div [hidden]="hiddenSpecialist" @fadeIn>
+        <div [hidden]="hiddenSpecialist">
             <div class="card m-2 p-2">
                 <p class="fw-bold m-3 p-1">Elija un especialista:</p>
                 <div class="d-flex flex-row">

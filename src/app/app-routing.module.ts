@@ -14,6 +14,7 @@ const routes: Routes = [
   { path: 'perfil', loadChildren: () =>import('./modules/my-profile/my-profile.module').then((m) => m.MyProfileModule),  canActivate: [anyUserGuard] }, 
   { path: 'turnos', loadChildren: () =>import('./modules/appointments/appointments.module').then((m) => m.AppointmentsModule), canActivate: [anyUserGuard]},
   { path: 'pacientes', loadChildren: () =>import('./modules/patients/patients.module').then((m) => m.PatientsModule), canActivate: [specialistGuard]}, 
+  { path: 'informes', loadChildren: () =>import('./modules/reports/reports.module').then((m) => m.ReportsModule), canActivate: [adminGuard] },
 ];
 
 @NgModule({

@@ -1,11 +1,13 @@
 
-<div [hidden]="!showHistory" class="justify-content-center align-items-center">
-    <button title="Volver" class="btn btn-warning" (click)="returnFromHistory()"><i class="fa-solid fa-circle-arrow-left"></i>Volver</button>
-    <app-history [selectedUser]="selectedUser"></app-history>
+<div [hidden]="hiddenHistory">
+    <div class="justify-content-center align-items-center">
+        <button title="Volver" class="btn btn-warning m-2 p-2" (click)="returnFromHistory()"><i class="fa-solid fa-circle-arrow-left"></i>Volver</button>
+        <app-history [selectedUser]="selectedUser"></app-history>
+    </div>
 </div>
 
 
-<section class="row justify-content-end w-100 p-0 m-0" [hidden]="showHistory">
+<section class="row justify-content-end w-100 p-0 m-0" [hidden]="hiddenMain" @slideInDown>
     <div class="p-5 mt-4 shadow bg-body-tertiary rounded-3">
         <div class="container-fluid py-5">
             <h1 class="text-center display-5 fw-bold">Usuarios Registrados</h1>
@@ -15,7 +17,8 @@
                 <button class="col-xxl-1 col-sm-2 col-6 m-1 p-3 btn boton rounded-circle" (click)="chooseListOption('admin')" title="Administradores"><img src="../../../assets/img/admin.png" class="card-img img-fluid rounded-circle"alt="Administradores" /></button>
             </section>
             <div class="d-flex flex-row justify-content-center align-items-center p-2 m-2">
-                <button (click)="downloadUsersAsExcel()" class="btn boton2">Descargar Usuarios <img src="../../../assets/img/excel.png" alt="excel" style="width: 75px; height: 50px;"></button>
+                <button (click)="downloadUsersAsExcel()" class="btn boton2 m-1 p-1">Descargar Todos <img src="../../../assets/img/excel.png" alt="excel" style="width: 75px; height: 50px;"></button>
+                <button (click)="selectUserToDownload()" class="btn boton2 m-1 p-1">Descargar Turnos <img src="../../../assets/img/excel.png" alt="excel" style="width: 75px; height: 50px;"></button>
             </div>
         </div>
     </div>
@@ -24,7 +27,7 @@
 
 <!-- <app-users-table [list]="listFiltered" [showTable]="showTable" [roleOption]="listChoseOption" (eventShowTable)="handlerUpdateView($event)" (eventSendUser)="handleSelectUser($event)"></app-users-table> -->
 
-<section class="row justify-content-end w-100 p-0 m-0" [hidden]="showHistory">
+<section class="row justify-content-end w-100 p-0 m-0" [hidden]="hiddenMain" @slideInDown>
     <div class="p-5 mt-4 shadow bg-body-tertiary rounded-3">
         <div class="container-fluid py-5">
             <h1 class="text-center display-5 fw-bold">Alta Usuarios</h1>
@@ -39,6 +42,20 @@
                         <button title="Salir del Alta" class="col-sm-1 col-md-2 col-8 btn btn-warning" (click)="return()">Salir del Alta</button>
                     </div>
                     <app-register></app-register>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section [hidden]="hiddenUsers">
+    <div class="d-flex flex-column justify-content-center align-items-center">
+        <button title="Volver" class="btn btn-warning m-2 p-2" (click)="returnToMain()"><i class="fa-solid fa-circle-arrow-left"></i>Volver</button>
+        <h1 style="text-decoration: underline; margin-bottom: 50px;" class="fw-bold">Selecciona a un usuario para descargar sus turnos:</h1>
+        <div class="w-75 d-flex flex-row justify-content-center align-items-center" id="botones">
+            <div *ngFor="let user of this.userService.users">
+                <div *ngIf="user.userRole != 'admin'">
+                    <button (click)="dowloadOneAsExcel(user)" class="m-1 p-3 d-flex flex-column align-items-center justify-content-center botonFab" style="width: 200px; height: 200px;"><img src="{{user.profilePhoto}}" alt="foto_paciente" style="height: 100px; width: 100px;" class="card-img img-fluid rounded-circle"><h5>{{user.lastName}}, {{user.name}}</h5></button>
                 </div>
             </div>
         </div>

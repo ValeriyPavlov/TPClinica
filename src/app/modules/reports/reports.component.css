@@ -1,0 +1,16 @@
+.boton{
+    background-color: rgb(185, 244, 253);
+    border: 2px solid black;
+    width: 160px;
+}
+
+.boton:hover{
+    background-color: rgb(3, 161, 252);
+    color: white;
+}
+
+.bg-beige{
+    background-color: beige;
+    padding: 0;
+    margin: 0;
+}

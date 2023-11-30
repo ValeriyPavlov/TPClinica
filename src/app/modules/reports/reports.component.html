@@ -1,0 +1,99 @@
+<div class="bg-beige card" style="margin: 0; padding: 0;">
+
+
+<h1 class="text-center m-1 p-2">Informes:</h1>
+
+
+<div class="d-flex flex-row justify-content-center p-3 m-3 card">
+    <div style="width: 35vw; height: 50vh;">
+        <div class="d-flex flex-row justify-content-center align-items-center">
+            <h4>A.- Ingresos al sistema:</h4>
+            <button class="btn boton btn-warning m-3" (click)="this.downloadChart('A','Ingresos al sistema:')">Descargar <img src="../../../assets/img/pdf.png" alt="pdf" style="height: 40px; width: 40px;"></button>
+        </div>
+        <canvas
+            baseChart
+            id="A"
+            class="chart"
+            [data]="bubbleChartData"
+            [options]="bubbleChartOptions"
+            [legend]="false"
+            [type]="bubbleChartType">
+        </canvas>
+
+    </div>
+</div>
+
+<div class="d-flex flex-row justify-content-center p-3 m-3 card">
+
+    <div style="margin-bottom: 20px; size: 35%;" *ngIf="showGraph2">
+        <div class="d-flex flex-row justify-content-center align-items-center">
+            <h4>B.- Cantidad de Turnos por Especialidad:</h4>
+            <button class="btn boton btn-warning m-3" (click)="this.downloadChart('B','Cantidad de Turnos por Especialidad:')">Descargar <img src="../../../assets/img/pdf.png" alt="pdf" style="height: 40px; width: 40px;"></button>
+        </div>
+        <canvas
+            baseChart
+            id="B"
+            class="chart"
+            [data]="pieChartData"
+            [type]="pieChartType"
+            [options]="pieChartOptions"
+            [plugins]="pieChartPlugins">
+        </canvas>
+    </div>
+
+
+    <div style="width: 35vw; height: 35vh; margin-left:10%;" *ngIf="barChartData != undefined">
+        <div class="d-flex flex-row justify-content-center align-items-center">
+            <h4>C.- Cantidad de Turnos por Dia:</h4>
+            <button class="btn boton btn-warning m-3" (click)="this.downloadChart('C','Cantidad de Turnos por Dia:')">Descargar <img src="../../../assets/img/pdf.png" alt="pdf" style="height: 40px; width: 40px;"></button>
+        </div>
+        <canvas
+            baseChart
+            id="C"
+            class="chart"
+            [data]="barChartData"
+            [type]="barChartType"
+            [options]="barChartOptions"
+            [plugins]="barChartPlugins">
+        </canvas>
+    </div>
+</div>
+
+<div class="d-flex flex-row justify-content-center p-3 m-3 card" style="height: 54vh; padding-bottom: 20px;" *ngIf="this.lineChartData != undefined">
+    <div style="width: 35vw; height: 35vh;">
+        <div class="d-flex flex-row justify-content-center align-items-center">
+            <h4>D.- Cantidad de Turnos solicitados por Especialista:</h4>
+            <button class="btn boton btn-warning m-3" (click)="this.downloadChart('D','Cantidad de Turnos solicitados por Especialista:')">Descargar <img src="../../../assets/img/pdf.png" alt="pdf" style="height: 40px; width: 40px;"></button>
+        </div>
+        <canvas
+            baseChart
+            id="D"
+            class="chart"
+            [data]="lineChartData"
+            [options]="lineChartOptions"
+            [type]="lineChartType">
+        </canvas>
+    </div>
+
+    <div style="width: 35vw; height: 35vh; margin-left:10%;">
+        <div class="d-flex flex-row justify-content-center align-items-center">
+            <h4>E.- Cantidad de Turnos finalizados por Especialista:</h4>
+            <button class="btn boton btn-warning m-3" (click)="this.downloadChart('E','Cantidad de Turnos finalizados por Especialista:')">Descargar <img src="../../../assets/img/pdf.png" alt="pdf" style="height: 40px; width: 40px;"></button>
+        </div>
+        <canvas
+            baseChart
+            id="E"
+            class="chart"
+            [data]="lineChartData2"
+            [options]="lineChartOptions"
+            [type]="lineChartType">
+        </canvas>
+    </div>
+</div>
+
+
+</div>
+
+
+
+

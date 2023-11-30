@@ -7,13 +7,14 @@ import { AlertService } from 'src/app/services/alert.service';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { UserService } from 'src/app/services/user.service';
 
+
 @Component({
   selector: 'app-patients',
   templateUrl: './patients.component.html',
   styleUrls: ['./patients.component.css']
 })
 export class PatientsComponent implements OnInit{
-
+  
   public list?: Paciente[];
   protected ref: any;
   @Input() public roleOption?: UserRole;
@@ -77,4 +78,5 @@ export class PatientsComponent implements OnInit{
     this.selectedUser = user;
     this.showTable = !this.showTable;
   }
+
 }

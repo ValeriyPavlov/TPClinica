@@ -69,36 +69,78 @@ export class ViewAppointmentsComponent implements OnInit{
   protected searchAppoinment($event: Event) {
     const input = $event.target as HTMLInputElement;
     const textInput = input.value.toLowerCase();
+
     if(this.uService.userLogged?.userRole == "paciente")
     {
-      this.listOfAppointmentsFiltered = this.aService.appointments.filter(app => app.patient.userId == this.uService.userLogged?.userId && (app.speciality?.toLowerCase().includes(textInput) || app.specialist.lastName.toLowerCase().includes(textInput) || this.filterDiagnosis(app, textInput) || app.specialist.name.toLowerCase().includes(textInput))) as Turno[];
+      this.listOfAppointmentsFiltered = this.aService.appointments.filter(app => 
+        app.patient.userId == this.uService.userLogged?.userId && 
+        (
+          app.speciality?.toLowerCase().includes(textInput) || 
+          app.specialist.lastName.toLowerCase().includes(textInput) || 
+          app.specialist.name.toLowerCase().includes(textInput) ||
+          app.patient.lastName.toLowerCase().includes(textInput) || 
+          app.patient.name.toLowerCase().includes(textInput) ||
+          app.state?.toString().toLowerCase().includes(textInput) ||
+          app.day.dayOfWeek.toLowerCase().includes(textInput) || 
+          app.day.date?.toString().includes(textInput) ||
+          app.review?.includes(textInput) ||
+          app.day.timeStart.toString().includes(textInput) || 
+          app.day.timeEnd.toString().includes(textInput) ||
+          (app.day.timeStart.toString().includes(".5") && textInput.includes("3")) ||
+          (app.day.timeEnd.toString().includes(".5") && textInput.includes("3")) ||
+          this.filterDiagnosis(app, textInput)
+        )) as Turno[];
     }
     else
     {
       if(this.uService.userLogged?.userRole == "especialista"){
-        this.listOfAppointmentsFiltered = this.aService.appointments.filter(app => app.specialist.userId == this.uService.userLogged?.userId && ( app.speciality?.toLowerCase().includes(textInput) || app.patient.lastName.toLowerCase().includes(textInput) || this.filterDiagnosis(app, textInput) || app.patient.name.toLowerCase().includes(textInput))) as Turno[];
+        this.listOfAppointmentsFiltered = this.aService.appointments.filter(app => 
+          app.specialist.userId === this.uService.userLogged?.userId && 
+          ( 
+            app.speciality?.toLowerCase().includes(textInput) || 
+            app.patient.lastName.toLowerCase().includes(textInput) || 
+            app.patient.name.toLowerCase().includes(textInput) ||
+            app.state?.toString().toLowerCase().includes(textInput) ||
+            app.day.dayOfWeek.toLowerCase().includes(textInput) || 
+            app.day.date?.toString().includes(textInput) ||
+            app.specialist.lastName.includes(textInput) ||
+            app.specialist.name.includes(textInput) ||
+            app.review?.includes(textInput) ||
+            app.day.timeStart.toString().includes(textInput) || 
+            app.day.timeEnd.toString().includes(textInput) ||
+            (app.day.timeStart.toString().includes(".5") && textInput.includes("3")) ||
+            (app.day.timeEnd.toString().includes(".5") && textInput.includes("3")) ||
+            this.filterDiagnosis(app, textInput)
+          )) as Turno[];
       }
       else
       {
-        this.listOfAppointmentsFiltered = this.aService.appointments.filter(app => app.speciality?.toLowerCase().includes(textInput) || app.specialist.lastName.toLowerCase().includes(textInput) || app.specialist.name.toLowerCase().includes(textInput)) as Turno[];
-
+        if(this.uService.userLogged?.userRole == "admin"){
+          this.listOfAppointmentsFiltered = this.aService.appointments.filter(app => app.speciality?.toLowerCase().includes(textInput) || app.specialist.lastName.toLowerCase().includes(textInput) || app.specialist.name.toLowerCase().includes(textInput)) as Turno[];
+        }
       }
     }
   }
 
   protected filterDiagnosis(app: Turno, data: string){
     let retorno = false;
-    const {pressure, weight, height, temperature, dynamicData} = app.diagnosis as Diagnostico;
-    if(pressure.toString().includes(data) || weight.toString().includes(data) || height.toString().includes(data) || temperature.toString().includes(data) || app.state?.toLowerCase().includes(data) || app.day.dayOfWeek.toLowerCase().includes(data) || app.day.date?.toString().includes(data) || app.day.timeStart.toString().includes(data) || app.day.timeEnd.toString().includes(data))
-    {
-      retorno = true;
-    }
-    const dynamicDataArray = dynamicData as DynamicData[];
-    dynamicDataArray.forEach(dato => {
-      if((dato.key).toLowerCase().includes(data.toLowerCase()) || (dato.value).toLowerCase().includes(data)){
+    if(app.diagnosis != undefined){
+      const {pressure, weight, height, temperature, dynamicData} = app.diagnosis as Diagnostico;
+      if(pressure.toString().includes(data) || 
+        weight.toString().includes(data) || 
+        height.toString().includes(data) || 
+        temperature.toString().includes(data) 
+        )
+      {
         retorno = true;
       }
-    });
+      const dynamicDataArray = dynamicData as DynamicData[];
+      dynamicDataArray.forEach(dato => {
+        if((dato.key).toLowerCase().includes(data) || (dato.value).toLowerCase().includes(data)){
+          retorno = true;
+        }
+      });
+    }
     return retorno;
   }
 
@@ -182,12 +224,12 @@ export class ViewAppointmentsComponent implements OnInit{
   }
 
   protected async handleDiagnosis(data: Diagnostico){
-    this.hiddenDiagnose = false;
     this.diagnosis = data;
     if (this.review != undefined && this.review != "" && this.diagnosis != undefined) {
       try {
         await this.aService.saveAppointmentWithIdInStore(this.selectedAppointment?.id!, { ...this.selectedAppointment!, state: "Realizado", review: this.review, diagnosis: this.diagnosis});
         await this.alertService.showAlert({icon: 'success', message: 'Turno Finalizado con exito', timer: 2000}); 
+        this.hiddenDiagnose = false;
         this.listOfAppointmentsFiltered = this.aService.appointments.filter(app => app.specialist.userId == this.uService.userLogged?.userId) as Turno[];
         this.selectedAppointment = undefined;
         this.review = undefined;

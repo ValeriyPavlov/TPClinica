@@ -1,11 +1,11 @@
 <div *ngIf="this.uService.userLogged?.userRole == 'admin'">
     <div class="row w-100 justify-content-center">
         <div class="col-5">
-            <h3 class="row w-100 justify-content-center">Listado de turnos:</h3>
+            <h3 class="row w-100 justify-content-center m-3 p-3">Listado de turnos:</h3>
           <input
             class="form-control p-2 mb-2"
             type="text"
-            placeholder="Ingrese especialidad o nombre del especialista para filtrar..."
+            placeholder="Ingrese dato para filtrar..."
             (keyup)="searchAppoinment($event)"/>
         </div>
     </div>
@@ -57,47 +57,47 @@
 <div *ngIf="this.uService.userLogged?.userRole == 'especialista'" [hidden]="hiddenDiagnose">
     <div class="row w-100 justify-content-center">
         <div class="col-5">
-            <h3 class="row w-100 justify-content-center">Listado de turnos:</h3>
+            <h3 class="row w-100 justify-content-center m-3 p-3">Listado de turnos de {{this.uService.userLogged?.lastName}}, {{this.uService.userLogged?.name}}:</h3>
           <input
             class="form-control p-2 mb-2"
             type="text"
-            placeholder="Ingrese especialidad o nombre del paciente para filtrar..."
+            placeholder="Ingrese dato para filtrar..."
             (keyup)="searchAppoinment($event)"/>
         </div>
     </div>
     <table *ngIf="this.aService.appointments" class="table table-striped table-ligth">
         <thead class="table-info">
           <tr>
-            <th *ngIf="this.aService.appointments.length > 0" class="text-center fw-bold">Especialista</th>
-            <th *ngIf="this.aService.appointments.length > 0" class="text-center fw-bold">Especialidad</th>
-            <th *ngIf="this.aService.appointments.length > 0" class="text-center fw-bold">Paciente</th>
-            <th *ngIf="this.aService.appointments.length > 0" class="text-center fw-bold">Dia</th>
-            <th *ngIf="this.aService.appointments.length > 0" class="text-center fw-bold">Hora</th>
-            <th *ngIf="this.aService.appointments.length > 0" class="text-center fw-bold">Estado</th>
-            <th *ngIf="this.aService.appointments.length > 0" class="text-center fw-bold">Acciones</th>
+            <th *ngIf="this.listOfAppointmentsFiltered.length > 0" class="text-center fw-bold">Especialista</th>
+            <th *ngIf="this.listOfAppointmentsFiltered.length > 0" class="text-center fw-bold">Especialidad</th>
+            <th *ngIf="this.listOfAppointmentsFiltered.length > 0" class="text-center fw-bold">Paciente</th>
+            <th *ngIf="this.listOfAppointmentsFiltered.length > 0" class="text-center fw-bold">Dia</th>
+            <th *ngIf="this.listOfAppointmentsFiltered.length > 0" class="text-center fw-bold">Hora</th>
+            <th *ngIf="this.listOfAppointmentsFiltered.length > 0" class="text-center fw-bold">Estado</th>
+            <th *ngIf="this.listOfAppointmentsFiltered.length > 0" class="text-center fw-bold">Acciones</th>
           </tr>
         </thead>
         <tbody class="table-group-divider">
-          <tr *ngFor="let element of listOfAppointmentsFiltered">
-            <td *ngIf="listOfAppointmentsFiltered.length > 0" class="text-center">
-                {{element.specialist.lastName}}, {{element.specialist.name}}
-            </td>
-            <td *ngIf="listOfAppointmentsFiltered.length > 0" class="text-center">
+          <tr *ngFor="let element of this.listOfAppointmentsFiltered">
+            <td *ngIf="this.listOfAppointmentsFiltered.length > 0" class="text-center">
+              {{element.specialist.lastName}}, {{element.specialist.name}}
+          </td>
+            <td *ngIf="this.listOfAppointmentsFiltered.length > 0" class="text-center">
                 {{element.speciality}}
             </td>
-            <td *ngIf="listOfAppointmentsFiltered.length > 0" class="text-center">
+            <td *ngIf="this.listOfAppointmentsFiltered.length > 0" class="text-center">
                 {{element.patient.lastName}}, {{element.patient.name}}
             </td>
-            <td *ngIf="listOfAppointmentsFiltered.length > 0" class="text-center">
+            <td *ngIf="this.listOfAppointmentsFiltered.length > 0" class="text-center">
                 {{element.day.dayOfWeek}}, {{element.day.date}}
             </td>
-            <td *ngIf="listOfAppointmentsFiltered.length > 0" class="text-center">
+            <td *ngIf="this.listOfAppointmentsFiltered.length > 0" class="text-center">
               {{element.day.timeStart | hours}} a {{element.day.timeEnd | hours}}
             </td>
-            <td *ngIf="listOfAppointmentsFiltered.length > 0" class="text-center bg-state">
+            <td *ngIf="this.listOfAppointmentsFiltered.length > 0" class="text-center bg-state">
                 {{element.state}}
             </td>
-            <td *ngIf="listOfAppointmentsFiltered.length > 0" class="text-center">
+            <td *ngIf="this.listOfAppointmentsFiltered.length > 0" class="text-center">
               <button *ngIf="element.state !='Realizado' && element.state != 'Cancelado' && element.state != 'Rechazado'" class="btn btn-danger m-1" type="button" (click)="cancelAppointment2(element)" title="CANCELAR">C</button>
               <button *ngIf="element.review" class="btn btn-warning m-1" type="button" (click)="showReview(element)" title="RESEÑA">R</button>
               <button *ngIf="element.state == 'Pendiente'" class="btn btn-success m-1" type="button" (click)="showAccept(element)" title="ACEPTAR">A</button>
@@ -111,11 +111,11 @@
 <div *ngIf="this.uService.userLogged?.userRole == 'paciente'">
     <div class="row w-100 justify-content-center">
         <div class="col-5">
-            <h3 class="row w-100 justify-content-center p-2">Listado de turnos:</h3>
+            <h3 class="row w-100 justify-content-center m-3 p-3">Listado de turnos de {{this.uService.userLogged?.lastName}}, {{this.uService.userLogged?.name}}:</h3>
           <input
             class="form-control p-2 mb-2"
             type="text"
-            placeholder="Ingrese especialidad o nombre del especialista para filtrar..."
+            placeholder="Ingrese dato para filtrar..."
             (keyup)="searchAppoinment($event)"/>
         </div>
     </div>

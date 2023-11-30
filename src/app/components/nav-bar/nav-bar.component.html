@@ -52,6 +52,9 @@
           <li *ngIf="userService.userLogged && userService.userLogged?.userRole === 'especialista'" class="nav-item">
             <a class="nav-link" routerLink="pacientes" routerLinkActive="actual badge" data-bs-dismiss="offcanvas">Pacientes</a>
           </li>
+          <li *ngIf="userService.userLogged && userService.userLogged?.userRole === 'admin'" class="nav-item">
+            <a class="nav-link" routerLink="informes" routerLinkActive="actual badge" data-bs-dismiss="offcanvas">Informes</a>
+          </li>
         </ul>
       </div>
     </div>
