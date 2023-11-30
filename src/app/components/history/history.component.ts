@@ -95,16 +95,17 @@ export class HistoryComponent implements OnChanges{
   }
 
   protected getDiagnosis(item: Turno){
-    let diag = item.diagnosis as Diagnostico;
     let retorno: string[] = [];
-    retorno.push(`Altura: ${diag.height} cm`);
-    retorno.push(`Peso: ${diag.weight} kg`);
-    retorno.push(`Temperatura: ${diag.temperature} C°`);
-    retorno.push(`Presion: ${diag.pressure} mmHg`);
-    
-    diag.dynamicData?.forEach(e => {
+    if(item != undefined){
+      let diag = item.diagnosis as Diagnostico;
+      retorno.push(`Altura: ${diag.height} cm`);
+      retorno.push(`Peso: ${diag.weight} kg`);
+      retorno.push(`Temperatura: ${diag.temperature} C°`);
+      retorno.push(`Presion: ${diag.pressure} mmHg`);
+      diag.dynamicData?.forEach(e => {
       retorno.push(`${e.key}: ${e.value}`);
-    });
+      });
+    }
     return retorno;
   }
 

@@ -67,6 +67,7 @@ export class MyProfileComponent implements OnInit{
   }
 
   protected getMedicalRecord(){
+    this.selectedUser = this.uService.userLogged;
     this.hijoComponent.getMedicalRecord(this.selectedUser!);
     this.hiddenProfile = true;
   }

@@ -1,6 +1,6 @@
 
 <div class="d-flex flex-column justify-content-center align-items-center m-3 p-3">
-    <div *ngIf="this.uService.userLogged?.userRole =='admin' && selectedUser">
+    <div *ngIf="this.uService.userLogged?.userRole =='admin' && selectedUser != undefined">
         <h2 class="d-flex justify-content-center align-items-center m-1 p-1">Historia Clínica de {{selectedUser.lastName}}, {{selectedUser.name}}:</h2>
     </div>
     <div *ngIf="this.uService.userLogged?.userRole =='paciente'">
@@ -18,10 +18,8 @@
     </div>
 
     <div class="w-75 m-5 p-2 card bg-beige" *ngIf="selectedUser != undefined">
-        
-
         <div class="d-flex flex-column" *ngIf="myAppointments.length > 0">
-            <div *ngFor="let turno of myAppointments; let i = index" class="card m-1 p-1">
+            <div *ngFor="let turno of myAppointments" class="card m-1 p-1">
         
                 <div class="d-flex flex-row m-1 p-1">
                     <div class="titles">
@@ -44,7 +42,7 @@
                     </div>
                 </div>
 
-                <div class="d-flex flex-row m-1 p-1">
+                <div class="d-flex flex-row m-1 p-1" *ngIf="turno">
                     <div class="titles">
                         Reseña:
                     </div>
